@@ -18,11 +18,19 @@
 		"@sveltejs/kit": "^2.16.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@tailwindcss/typography": "^0.5.16",
+		"@types/better-sqlite3": "^7.6.12",
 		"autoprefixer": "^10.4.20",
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
+		"svelte-dnd-action": "^0.9.57",
 		"tailwindcss": "^3.4.17",
 		"typescript": "^5.0.0",
 		"vite": "^6.0.0"
+	},
+	"dependencies": {
+		"better-sqlite3": "^11.8.1",
+		"lodash": "^4.17.21",
+		"qr-code-styling": "^1.9.1",
+		"uuid": "^11.0.5"
 	}
 }
