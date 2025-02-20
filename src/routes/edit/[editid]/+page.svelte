@@ -119,24 +119,27 @@
       <p class="italic">Your list is empty. Search for songs to add!</p>
     {:else}
       {#each list.items as item, index}
-        <div class="flex items-left p-3 rounded-lg border shadow-md">
-          {#await getCoverArt(item.release.mbid)}
-            <img src="" alt="" class="w-16 h-16 mr-2 object-cover placeholder animate-pulse rounded-md" />
-          {:then value}
-            <img src={value || "https://placehold.co/100?text=NA"} alt="" class="w-16 h-16 mr-2 object-cover rounded-md" />
-          {:catch error}
-            <img src="https://placehold.co/100?text=NA" alt="" class="w-16 h-16 mr-2 object-cover placeholder rounded-md" />
-          {/await}
-          <div>
-            <div class="font-medium">{item.title}</div>
-            <div class="text-sm">
-              {item.artist}
+        <div class="flex items-center justify-between p-3 rounded-lg border shadow-md">
+          <div class="flex">
+            <div>
+              {#await getCoverArt(item.release.mbid)}
+                <img src="" alt="" class="w-16 h-16 mr-2 object-cover placeholder animate-pulse rounded-md" />
+              {:then value}
+                <img src={value || "https://placehold.co/100?text=NA"} alt="" class="w-16 h-16 mr-2 object-cover rounded-md" />
+              {:catch error}
+                <img src="https://placehold.co/100?text=NA" alt="" class="w-16 h-16 mr-2 object-cover placeholder rounded-md" />
+              {/await}
             </div>
-            <div class="text-sm text-gray-500">{item.release.title} ({item.release.date})</div>
+            <div>
+              <div class="font-medium">{item.title}</div>
+              <div class="text-sm">{item.artist}</div>
+              <div class="text-sm text-gray-500">{item.release.title} ({item.release.date})</div>
+            </div>
           </div>
           <button
+            type="button"
               on:click={async () => await removeItem(index)}
-              class="text-red-500 hover:text-red-700 font-medium"
+              class="btn btn-sm preset-filled-error-500"
             >
             Remove
           </button>
