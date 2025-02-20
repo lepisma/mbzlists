@@ -1,27 +1,8 @@
 <script>
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
-  import { v4 as uuidv4 } from 'uuid';
+  import { createList } from '$lib/ops';
 
-  async function createList(name) {
-    const listItem = {
-      name: name,
-      editId: uuidv4(),
-      viewId: uuidv4(),
-    };
-
-    let lists = JSON.parse(localStorage.getItem('lists') || '[]');
-    lists.push(listItem);
-    localStorage.setItem('lists', JSON.stringify(lists));
-
-    await fetch(`/api/edit/${listItem.editId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ listid: listItem.viewId, name: listItem.name, items: [] }),
-    });
-
-    goto(`/edit/${listItem.editId}`);
-  }
   let lists = browser ? JSON.parse(localStorage.getItem('lists') || '[]') : [];
   let listName = '';
 </script>
@@ -39,7 +20,10 @@
     <div class="flex space-x-4 mb-4">
       <div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
 	<input type="search" bind:value={listName} placeholder="List Name" />
-        <button on:click={() => createList(listName)} class="btn variant-filled-primary">
+        <button on:click={async () => {
+          let list = await createList(listName, []);
+          goto(`/edit/${list.editId}`);
+          }} class="btn variant-filled-primary">
           Create
         </button>
       </div>
