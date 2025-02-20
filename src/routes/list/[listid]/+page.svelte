@@ -2,18 +2,7 @@
   import { page } from '$app/stores';
   import { onMount } from 'svelte';
   import QrCode from '$lib/components/QrCode.svelte';
-
-  interface Song {
-    mbid: string;
-    title: string;
-    artist: string;
-  };
-
-  interface List {
-     viewId: string;
-     name: string;
-     items: Song[];
-  };
+  import { loadList } from '$lib/ops';
 
   let list = {
      viewId: $page.params.listid,
@@ -24,14 +13,6 @@
   let searchQuery = '';
   let searchResults = [];
   let showDropdown = false;
-
-  async function loadList() {
-    let res = await fetch(`/api/list/${list.viewId}`);
-    let details = await res.json();
-
-    list.name = details.name;
-    list.items = details.items;
-  }
 
   function cloneList() {
   }
@@ -63,7 +44,9 @@
     document.body.removeChild(a);
   }
 
-  onMount(loadList);
+  onMount(async () => {
+     list = await loadList(list.viewId);
+  });
 </script>
 
 <div class="max-w-2xl mx-auto rounded-lg shadow-lg p-6 grid grid-cols-3 gap-6">
