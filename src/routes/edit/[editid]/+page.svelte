@@ -3,7 +3,7 @@
   import { onMount } from 'svelte';
   import debounce from 'lodash/debounce';
   import QrCode from '$lib/components/QrCode.svelte';
-  import { loadEditableList, createList } from '$lib/ops';
+  import { loadEditableList, createList, saveList } from '$lib/ops';
 
   let list = {
      viewId: '',
@@ -15,14 +15,6 @@
   let searchQuery = '';
   let searchResults = [];
   let showDropdown = false;
-
-  async function saveList() {
-    await fetch(`/api/edit/${list.editId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: list.name, items: list.items, listid: list.viewId }),
-    });
-  }
 
   function addItem(item) {
     list.items = [...list.items, item];
@@ -71,6 +63,10 @@
       searchSongs(searchQuery);
   }, 300);
 
+  const handleNameEdits = debounce(async () => {
+    await saveList(list);
+  }, 500);
+
   function playAll() {
     list.items.forEach(song => {
       window.open(`https://musicbrainz.org/recording/${song.mbid}`, '_blank');
@@ -113,7 +109,14 @@
       <a href="/">mbzcodes</a>
     </h1>
 
-    <h2 class="text-4xl font-semibold mb-2">{list.name} ✎</h2>
+    <input
+      type="text"
+      class="text-4xl font-semibold mb-2 bg-transparent border-b-2
+    border-gray-400 focus:border-blue-500 transition-colors outline-none"
+      bind:value={list.name}
+      on:input={handleNameEdits}
+      />
+
     <h3 class="text-l font-italic mb-4">Total {list.items.length} songs</h3>
 
     <div class="flex space-x-4 mb-4">

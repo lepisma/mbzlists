@@ -18,6 +18,19 @@ export async function loadEditableList(editId: string): Promise<EditableList> {
   };
 }
 
+function saveToLocalStorage(list: EditableList) {
+  let lists = JSON.parse(localStorage.getItem('lists') || '[]');
+  lists.push(list);
+  localStorage.setItem('lists', JSON.stringify(lists));
+}
+
+function updateLocalStorage(list: EditableList) {
+  let lists = JSON.parse(localStorage.getItem('lists') || '[]');
+  localStorage.setItem('lists', JSON.stringify(lists.map((item: EditableList) =>
+    item.editId === list.editId ? list : item
+  )));
+}
+
 // Create a new list and save it in localstorage
 export async function createList(name: string, items: Song[]): Promise<EditableList> {
   const list = {
@@ -33,9 +46,17 @@ export async function createList(name: string, items: Song[]): Promise<EditableL
     body: JSON.stringify({ listid: list.viewId, name: list.name, items: list.items }),
   });
 
-  let lists = JSON.parse(localStorage.getItem('lists') || '[]');
-  lists.push(list);
-  localStorage.setItem('lists', JSON.stringify(lists));
-
+  saveToLocalStorage(list);
   return list;
+}
+
+export async function saveList(list: EditableList) {
+  await fetch(`/api/edit/${list.editId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name: list.name, items: list.items, listid: list.viewId }),
+  });
+
+  // Also update name in local storage, in case it was changed
+  updateLocalStorage(list);
 }
