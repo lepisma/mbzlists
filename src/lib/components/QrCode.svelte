@@ -9,7 +9,7 @@
     qrCode = new QRCodeStyling({
       width: 150,
       height: 150,
-      data: `https://mbzcodes/list/${viewId}`,
+      data: `https://mbzlists.com/list/${viewId}`,
       image: '/mb-logo.png',
       dotsOptions: {
         color: "#bb4590",
