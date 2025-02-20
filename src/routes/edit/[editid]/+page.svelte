@@ -153,7 +153,7 @@
         on:input={handleInput}
         on:focus={() => showDropdown = true}
       placeholder="Add songs..."
-      class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+      class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent"
       >
       {#if showDropdown && searchResults.length > 0}
           <div class="absolute w-full bg-white mt-1 rounded-lg shadow-lg border max-h-60 overflow-y-auto z-10">
