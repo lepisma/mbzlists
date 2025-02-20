@@ -18,6 +18,7 @@ export default {
     typography,
     skeleton({
       themes: [ themes.cerberus, themes.rose ]
-    })
+    }),
+    require('@tailwindcss/forms'),
   ]
 } satisfies Config;
