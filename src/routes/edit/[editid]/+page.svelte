@@ -4,6 +4,7 @@
   import debounce from 'lodash/debounce';
   import QrCode from '$lib/components/QrCode.svelte';
   import { loadEditableList, createList, saveList } from '$lib/ops';
+  import { getCoverArt } from '$lib/mb';
 
   let list = {
      viewId: '',
@@ -146,7 +147,14 @@
       <p class="italic">Your list is empty. Search for songs to add!</p>
     {:else}
       {#each list.items as item, index}
-        <div class="flex items-center justify-between p-3 rounded-lg border shadow-md">
+        <div class="flex items-left p-3 rounded-lg border shadow-md">
+          {#await getCoverArt(item.release.mbid)}
+            <img src="" alt="" class="w-16 h-16 mr-2 object-cover placeholder animate-pulse rounded-md" />
+          {:then value}
+            <img src={value || "https://placehold.co/100?text=NA"} alt="" class="w-16 h-16 mr-2 object-cover rounded-md" />
+          {:catch error}
+            <img src="https://placehold.co/100?text=NA" alt="" class="w-16 h-16 mr-2 object-cover placeholder rounded-md" />
+          {/await}
           <div>
             <div class="font-medium">{item.title}</div>
             <div class="text-sm">
