@@ -3,19 +3,7 @@
   import { onMount } from 'svelte';
   import debounce from 'lodash/debounce';
   import QrCode from '$lib/components/QrCode.svelte';
-
-  interface Song {
-    mbid: string;
-    title: string;
-    artist: string;
-  };
-
-  interface List {
-     viewId: string;
-     editId: string;
-     name: string;
-     items: Song[];
-  };
+  import { loadEditableList } from '$lib/ops';
 
   let list = {
      viewId: '',
@@ -27,15 +15,6 @@
   let searchQuery = '';
   let searchResults = [];
   let showDropdown = false;
-
-  async function loadList() {
-    let res = await fetch(`/api/edit/${list.editId}`);
-    let details = await res.json();
-
-    list.items = details.items;
-    list.name = details.name;
-    list.viewId = details.id;
-  }
 
   async function saveList() {
     await fetch(`/api/edit/${list.editId}`, {
@@ -118,7 +97,9 @@
     document.body.removeChild(a);
   }
 
-  onMount(loadList);
+  onMount(async () => {
+    list = await loadEditableList(list.editId);
+  });
 </script>
 
 <div class="max-w-2xl mx-auto rounded-lg shadow-lg p-6 grid grid-cols-3 gap-6">
