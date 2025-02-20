@@ -120,7 +120,8 @@
     <h3 class="text-l font-italic mb-4">Total {list.items.length} songs</h3>
 
     <div class="flex space-x-4 mb-4">
-      <button on:click={playAll} class="btn btn-sm preset-filled-primary-500" disabled>Play</button>
+      <button on:click={playAll} class="btn btn-sm preset-filled-primary-500"
+      disabled>Play All</button>
       <button on:click={cloneList} class="btn btn-sm preset-filled-primary-500">Clone List</button>
       <button on:click={exportJSPF} class="btn btn-sm
       preset-filled-primary-500">Download JSPF</button>
