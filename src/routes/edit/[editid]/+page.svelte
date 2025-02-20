@@ -16,16 +16,16 @@
   let searchResults = [];
   let showDropdown = false;
 
-  function addItem(item) {
+  async function addItem(item) {
     list.items = [...list.items, item];
-    saveList();
+    await saveList(list);
     showDropdown = false;
     searchQuery = '';
   }
 
-  function removeItem(index) {
+  async function removeItem(index) {
     list.items = list.items.filter((_, i) => i !== index);
-    saveList();
+    await saveList(list);
   }
 
   async function cloneList() {
@@ -146,7 +146,7 @@
             <div class="text-sm">{item.artist}</div>
           </div>
           <button
-              on:click={() => removeItem(index)}
+              on:click={async () => await removeItem(index)}
               class="text-red-500 hover:text-red-700 font-medium"
             >
             Remove
@@ -169,7 +169,7 @@
               {#each searchResults as song}
                   <div
                       class="p-3 hover:bg-gray-100 cursor-pointer"
-                      on:click={() => addItem(song)}
+                      on:click={async () => await addItem(song)}
                       >
                       <div class="font-medium">{song.title}</div>
                       <div class="text-sm text-gray-600">{song.artist}</div>
