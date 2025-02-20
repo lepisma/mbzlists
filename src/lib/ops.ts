@@ -31,6 +31,13 @@ function updateLocalStorage(list: EditableList) {
   )));
 }
 
+function deleteFromLocalStorage(list: EditableList) {
+  let lists = JSON.parse(localStorage.getItem('lists') || '[]');
+  localStorage.setItem('lists', JSON.stringify(lists.filter((item: EditableList) =>
+    item.editId !== list.editId
+  )));
+}
+
 // Create a new list and save it in localstorage
 export async function createList(name: string, items: Song[]): Promise<EditableList> {
   const list = {
@@ -52,11 +59,19 @@ export async function createList(name: string, items: Song[]): Promise<EditableL
 
 export async function saveList(list: EditableList) {
   await fetch(`/api/edit/${list.editId}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: list.name, items: list.items, listid: list.viewId }),
   });
 
   // Also update name in local storage, in case it was changed
   updateLocalStorage(list);
+}
+
+export async function deleteList(list: EditableList) {
+  await fetch(`/api/edit/${list.editId}`, {
+    method: 'DELETE'
+  });
+
+  deleteFromLocalStorage(list);
 }

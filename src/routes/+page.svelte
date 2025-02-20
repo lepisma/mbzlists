@@ -1,7 +1,7 @@
 <script>
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
-  import { createList } from '$lib/ops';
+  import { createList, deleteList } from '$lib/ops';
 
   let lists = browser ? JSON.parse(localStorage.getItem('lists') || '[]') : [];
   let listName = '';
@@ -39,6 +39,17 @@
           <div>
             <div class="font-medium"><a href={`/edit/${list.editId}`}>{list.name}</a></div>
           </div>
+          <button
+            on:click={async () => {
+              await deleteList(list);
+              if (browser) {
+                lists = JSON.parse(localStorage.getItem('lists') || '[]');
+              }
+            }}
+            class="text-red-500 hover:text-red-700 font-medium"
+            >
+            Delete
+          </button>
         </div>
       {/each}
     {/if}

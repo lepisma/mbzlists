@@ -14,5 +14,10 @@ export async function POST({ params, request }) {
 }
 
 export async function DELETE({ params }) {
-  return json({ success: false });
+  try {
+    db.prepare("DELETE FROM lists WHERE edit_id = ?").run(params.editid);
+    return json({ success: true });
+  } catch (error) {
+    return json({ success: false, error: error.message }, { status: 500 });
+  }
 }
