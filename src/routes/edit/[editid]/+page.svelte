@@ -112,7 +112,7 @@
     <input
       type="text"
       class="text-4xl font-semibold mb-2 bg-transparent border-b-2
-    border-gray-400 focus:border-blue-500 transition-colors outline-none"
+    border-gray-400 focus:border-primary-500 transition-colors outline-none"
       bind:value={list.name}
       on:input={handleNameEdits}
       />
