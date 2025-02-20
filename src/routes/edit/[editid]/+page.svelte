@@ -49,7 +49,12 @@
       searchResults = data.recordings?.map(rec => ({
         title: rec.title,
         artist: rec['artist-credit']?.[0]?.name || 'Unknown Artist',
-        mbid: rec.id
+        mbid: rec.id,
+        release: {
+          date: rec['releases']?.[0]?.date || 'Unknown',
+          mbid: rec['releases']?.[0]?.id || 'Unknown',
+          title: rec['releases']?.[0]?.title || 'Unknown'
+        }
       })) || [];
 
       showDropdown = searchResults.length > 0;
@@ -144,7 +149,10 @@
         <div class="flex items-center justify-between p-3 rounded-lg border shadow-md">
           <div>
             <div class="font-medium">{item.title}</div>
-            <div class="text-sm">{item.artist}</div>
+            <div class="text-sm">
+              {item.artist}
+            </div>
+            <div class="text-sm text-gray-500">{item.release.title} ({item.release.date})</div>
           </div>
           <button
               on:click={async () => await removeItem(index)}
@@ -174,6 +182,7 @@
                       >
                       <div class="font-medium">{song.title}</div>
                       <div class="text-sm text-gray-600">{song.artist}</div>
+                      <div class="text-sm text-gray-500">{song.release.title} ({song.release.date})</div>
                   </div>
               {/each}
           </div>

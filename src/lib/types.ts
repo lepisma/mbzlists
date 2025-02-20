@@ -1,7 +1,14 @@
-export interface Song {
+export interface Release {
   mbid: string;
   title: string;
+  date: string;
+}
+
+export interface Song {
+  mbid: string;  // This is the recording id
+  title: string;
   artist: string;
+  release: Release;
 }
 
 export interface List {
