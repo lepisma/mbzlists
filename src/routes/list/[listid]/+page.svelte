@@ -2,7 +2,8 @@
   import { page } from '$app/stores';
   import { onMount } from 'svelte';
   import QrCode from '$lib/components/QrCode.svelte';
-  import { loadList } from '$lib/ops';
+  import { loadList, createList } from '$lib/ops';
+  import { goto } from '$app/navigation';
 
   let list = {
      viewId: $page.params.listid,
@@ -14,7 +15,9 @@
   let searchResults = [];
   let showDropdown = false;
 
-  function cloneList() {
+  async function cloneList() {
+    let clonedList = await createList(`Copy of ${list.name}`, list.items);
+    goto(`/edit/${clonedList.editId}`);
   }
 
   function playAll() {
@@ -60,7 +63,7 @@
 
     <div class="flex space-x-4 mb-4">
       <button on:click={playAll} class="btn btn-sm preset-filled-primary-500" disabled>Play All</button>
-      <button on:click={cloneList} class="btn btn-sm preset-filled-primary-500" disabled>Clone List</button>
+      <button on:click={cloneList} class="btn btn-sm preset-filled-primary-500">Clone List</button>
       <button on:click={exportJSPF} class="btn btn-sm preset-filled-primary-500">Download JSPF</button>
     </div>
   </div>

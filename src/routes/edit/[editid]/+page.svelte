@@ -3,7 +3,7 @@
   import { onMount } from 'svelte';
   import debounce from 'lodash/debounce';
   import QrCode from '$lib/components/QrCode.svelte';
-  import { loadEditableList } from '$lib/ops';
+  import { loadEditableList, createList } from '$lib/ops';
 
   let list = {
      viewId: '',
@@ -34,6 +34,11 @@
   function removeItem(index) {
     list.items = list.items.filter((_, i) => i !== index);
     saveList();
+  }
+
+  async function cloneList() {
+    let clonedList = await createList(`Copy of ${list.name}`, list.items);
+    window.open(`/edit/${clonedList.editId}`, '_blank');
   }
 
   async function searchSongs(query) {
@@ -113,7 +118,7 @@
 
     <div class="flex space-x-4 mb-4">
       <button on:click={playAll} class="btn btn-sm preset-filled-primary-500" disabled>Play</button>
-      <button class="btn btn-sm preset-filled-primary-500">Clone List</button>
+      <button on:click={cloneList} class="btn btn-sm preset-filled-primary-500">Clone List</button>
       <button on:click={exportJSPF} class="btn btn-sm
       preset-filled-primary-500">Download JSPF</button>
       <button on:click={openReadOnly} class="btn btn-sm
