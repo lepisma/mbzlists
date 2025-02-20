@@ -6,7 +6,6 @@
 
   let qrCode;
   onMount(() => {
-    console.log(viewId);
     qrCode = new QRCodeStyling({
       width: 150,
       height: 150,
