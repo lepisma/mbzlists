@@ -83,6 +83,7 @@
           <div>
             <div class="font-medium">{item.title}</div>
             <div class="text-sm">{item.artist}</div>
+            <div class="text-sm text-gray-500">{item.release.title} ({item.release.date})</div>
           </div>
         </div>
       {/each}
