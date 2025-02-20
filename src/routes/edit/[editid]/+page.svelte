@@ -79,10 +79,6 @@
     });
   }
 
-  function openReadOnly() {
-    window.open(`/list/${list.viewId}`);
-  }
-
   onMount(async () => {
     list = await loadEditableList(list.editId);
   });
@@ -105,12 +101,10 @@
     <h3 class="text-l font-italic mb-4">Total {list.items.length} songs</h3>
 
     <div class="flex space-x-4 mb-4">
-      <button on:click={playAll} class="btn btn-sm preset-filled-primary-500"
-      disabled>Play All</button>
+      <button on:click={playAll} class="btn btn-sm preset-filled-primary-500" disabled>Play All</button>
       <button on:click={cloneList} class="btn btn-sm preset-filled-primary-500">Clone List</button>
       <a href={`/api/list/${list.viewId}?type=xspf`} class="btn btn-sm preset-filled-primary-500">Download XSPF</a>
-      <button on:click={openReadOnly} class="btn btn-sm
-      preset-filled-primary-500">Read Only Mode</button>
+      <a href={`/list/${list.viewId}`} class="btn btn-sm preset-filled-primary-500">View Only Link</a>
     </div>
   </div>
 
