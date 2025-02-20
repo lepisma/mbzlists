@@ -83,27 +83,6 @@
     window.open(`/list/${list.viewId}`);
   }
 
-  function exportJSPF() {
-    const jspf = {
-      playlist: {
-        title: list.name,
-        track: list.items.map(song => ({
-          title: song.title,
-          creator: song.artist,
-          identifier: `https://musicbrainz.org/recording/${song.mbid}`
-        }))
-      }
-    };
-
-    const blob = new Blob([JSON.stringify(jspf, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `${listTitle.replace(/\s+/g, "_")}.jspf`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
-
   onMount(async () => {
     list = await loadEditableList(list.editId);
   });
@@ -129,8 +108,7 @@
       <button on:click={playAll} class="btn btn-sm preset-filled-primary-500"
       disabled>Play All</button>
       <button on:click={cloneList} class="btn btn-sm preset-filled-primary-500">Clone List</button>
-      <button on:click={exportJSPF} class="btn btn-sm
-      preset-filled-primary-500">Download JSPF</button>
+      <a href={`/api/list/${list.viewId}?type=xspf`} class="btn btn-sm preset-filled-primary-500">Download XSPF</a>
       <button on:click={openReadOnly} class="btn btn-sm
       preset-filled-primary-500">Read Only Mode</button>
     </div>

@@ -65,7 +65,7 @@
     <div class="flex space-x-4 mb-4">
       <button on:click={playAll} class="btn btn-sm preset-filled-primary-500" disabled>Play All</button>
       <button on:click={cloneList} class="btn btn-sm preset-filled-primary-500">Clone List</button>
-      <button on:click={exportJSPF} class="btn btn-sm preset-filled-primary-500">Download JSPF</button>
+      <a href={`/api/list/${list.viewId}?type=xspf`} class="btn btn-sm preset-filled-primary-500">Download XSPF</a>
     </div>
   </div>
 
