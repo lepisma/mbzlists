@@ -40,13 +40,14 @@
             <div class="font-medium"><a href={`/edit/${list.editId}`}>{list.name}</a></div>
           </div>
           <button
+            type="button"
             on:click={async () => {
               await deleteList(list);
               if (browser) {
                 lists = JSON.parse(localStorage.getItem('lists') || '[]');
               }
             }}
-            class="text-red-500 hover:text-red-700 font-medium"
+            class="btn btn-sm preset-filled-error-500"
             >
             Delete
           </button>
