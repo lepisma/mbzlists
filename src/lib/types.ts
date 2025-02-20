@@ -11,8 +11,8 @@ export interface List {
 }
 
 export interface EditableList {
-  viewId: string;
-  editId: string,
+  readonly viewId: string;
+  readonly editId: string,
   name: string;
   items: Song[];
 }
