@@ -17,13 +17,13 @@
       Total {lists.length} playlists remembered on this machine.
     </h3>
 
-    <div class="flex space-x-4 mb-4">
-      <div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-	<input type="search" bind:value={listName} placeholder="List Name" />
+    <div>
+      <div class="flex items-center ml-1">
+	<input type="search" class="w-full border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 input" bind:value={listName} placeholder="List Name" />
         <button on:click={async () => {
-          let list = await createList(listName, []);
-          goto(`/edit/${list.editId}`);
-          }} class="btn variant-filled-primary">
+            let list = await createList(listName, []);
+            goto(`/edit/${list.editId}`);
+          }} class="btn preset-filled-primary-500 ml-2">
           Create
         </button>
       </div>
@@ -35,7 +35,7 @@
       <p class="italic">Your have no playlist!</p>
     {:else}
       {#each lists as list}
-        <div class="flex items-center justify-between p-3 rounded-lg border shadow-md">
+        <div class="flex items-center justify-between p-3 rounded-lg border">
           <div>
             <div class="font-medium"><a href={`/edit/${list.editId}`}>{list.name}</a></div>
           </div>
