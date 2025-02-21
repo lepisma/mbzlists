@@ -4,10 +4,15 @@ export interface Release {
   date: string;
 }
 
-export interface Song {
-  mbid: string;  // This is the recording id
+export interface Artist {
+  mbid: string;
   title: string;
-  artist: string;
+}
+
+export interface Song {
+  mbid: string;  // This is musicbrainz `recording` id
+  title: string;
+  artist: Artist;
   release: Release;
 }
 

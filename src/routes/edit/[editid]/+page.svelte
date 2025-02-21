@@ -4,7 +4,7 @@
   import debounce from 'lodash/debounce';
   import QrCode from '$lib/components/QrCode.svelte';
   import { loadEditableList, createList, saveList } from '$lib/ops';
-  import { getCoverArt } from '$lib/mb';
+  import { getCoverArt, queryMB } from '$lib/mb';
 
   let list = {
      viewId: '',
@@ -41,27 +41,8 @@
       return;
     }
 
-    const url = `https://musicbrainz.org/ws/2/recording?query=${encodeURIComponent(query)}&fmt=json`;
-
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-
-      searchResults = data.recordings?.map(rec => ({
-        title: rec.title,
-        artist: rec['artist-credit']?.[0]?.name || 'Unknown Artist',
-        mbid: rec.id,
-        release: {
-          date: rec['releases']?.[0]?.date || 'Unknown',
-          mbid: rec['releases']?.[0]?.id || 'Unknown',
-          title: rec['releases']?.[0]?.title || 'Unknown'
-        }
-      })) || [];
-
-      showDropdown = searchResults.length > 0;
-    } catch (error) {
-      console.error("Error fetching songs:", error);
-    }
+    searchResults = await queryMB(query);
+    showDropdown = searchResults.length > 0;
   }
 
   const handleInput = debounce((e) => {
