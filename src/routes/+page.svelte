@@ -2,6 +2,8 @@
   import { goto } from '$app/navigation';
   import { createList, deleteList, loadFromLocalStorage } from '$lib/ops';
   import { formatDistanceToNow } from 'date-fns';
+  import IconPlusCircle from 'virtual:icons/la/plus-circle';
+  import IconTrash from 'virtual:icons/la/trash';
 
   let lists = loadFromLocalStorage();
   let listName = '';
@@ -28,7 +30,7 @@
             let list = await createList(listName, []);
             goto(`/edit/${list.editId}`);
           }} class="btn preset-filled-primary-500 ml-2">
-          Create
+          Add <IconPlusCircle />
         </button>
       </div>
     </div>
@@ -51,9 +53,8 @@
               await deleteList(list);
               lists = loadFromLocalStorage();
             }}
-            class="btn btn-sm preset-filled-error-500"
-            >
-            Delete
+            class="btn preset-filled-error-500">
+            <IconTrash />
           </button>
         </div>
       {/each}

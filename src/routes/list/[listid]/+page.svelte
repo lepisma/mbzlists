@@ -7,6 +7,9 @@
   import type { List } from '$lib/types';
   import { goto } from '$app/navigation';
   import { formatDistanceToNow } from 'date-fns';
+  import IconDownload from 'virtual:icons/la/download';
+  import IconPlay from 'virtual:icons/la/play';
+  import IconCopy from 'virtual:icons/la/copy';
 
   let list: List = {
     viewId: $page.params.listid,
@@ -73,9 +76,9 @@
     <h3 class="text-l mt-2 font-italic mb-4">Total {list.items.length} songs</h3>
 
     <div class="flex space-x-4 mb-4">
-      <button on:click={playAll} class="btn btn-sm preset-filled-primary-500" disabled>Play All</button>
-      <button on:click={cloneList} class="btn btn-sm preset-filled-primary-500">Clone List</button>
-      <a href={`/api/list/${list.viewId}?type=xspf`} class="btn btn-sm preset-filled-primary-500">Download XSPF</a>
+      <button on:click={playAll} class="btn btn-sm preset-filled-primary-500" disabled><IconPlay/></button>
+      <button on:click={cloneList} class="btn btn-sm preset-filled-primary-500"><IconCopy />Make a Copy</button>
+      <a href={`/api/list/${list.viewId}?type=xspf`} class="btn btn-sm preset-filled-primary-500"><IconDownload />XSPF</a>
     </div>
   </div>
 
