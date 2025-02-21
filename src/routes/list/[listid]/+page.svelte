@@ -53,6 +53,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>{list.name} | mbzlists</title>
+</svelte:head>
+
 <div class="max-w-2xl mx-auto rounded-lg shadow-lg p-6 grid grid-cols-3 gap-6">
   <div class="col-span-2">
     <h1 class="text-3xl font-bold text-gray-400 mb-4">
