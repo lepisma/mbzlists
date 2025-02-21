@@ -23,6 +23,7 @@
 
   async function addItem(item) {
     list.items = [...list.items, item];
+    list = {...list, lastModifiedOn: new Date()};
     await saveList(list);
     showDropdown = false;
     searchQuery = '';
@@ -30,6 +31,7 @@
 
   async function removeItem(index) {
     list.items = list.items.filter((_, i) => i !== index);
+    list = {...list, lastModifiedOn: new Date()};
     await saveList(list);
   }
 
@@ -50,11 +52,12 @@
   }
 
   const handleInput = debounce((e) => {
-      searchQuery = e.target.value;
-      searchSongs(searchQuery);
+    searchQuery = e.target.value;
+    searchSongs(searchQuery);
   }, 300);
 
   const handleNameEdits = debounce(async () => {
+    list = {...list, lastModifiedOn: new Date()};
     await saveList(list);
   }, 500);
 
