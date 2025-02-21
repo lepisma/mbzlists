@@ -90,6 +90,8 @@ export async function createList(name: string, items: Song[]): Promise<EditableL
 }
 
 export async function saveList(list: EditableList) {
+  let modifiedDate = new Date();
+
   await fetch(`/api/edit/${list.editId}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -98,12 +100,12 @@ export async function saveList(list: EditableList) {
       name: list.name,
       items: list.items,
       createdOn: list.createdOn.toISOString(),
-      lastModifiedOn: list.lastModifiedOn.toISOString()
+      lastModifiedOn: modifiedDate.toISOString()
     }),
   });
 
-  // Also update name in local storage, in case it was changed
-  updateLocalStorage(list);
+  // Also update properties in local storage, in case it was changed
+  updateLocalStorage({...list, lastModifiedOn: modifiedDate});
 }
 
 export async function deleteList(list: EditableList) {
