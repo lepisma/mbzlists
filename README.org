@@ -1,1 +1,3 @@
 #+title: mbzlists
+
+Self hosted universal playlists manager based on Musicbrainz IDs.
