@@ -165,7 +165,7 @@
         type="text"
         on:input={handleInput}
         on:focus={() => showDropdown = true}
-      placeholder="Add songs..."
+      placeholder="Search songs using Musicbrainz lucene syntax..."
       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent"
       >
       {#if showDropdown && searchResults.length > 0}
