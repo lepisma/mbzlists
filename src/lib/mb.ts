@@ -39,7 +39,27 @@ export async function queryMB(query: string): Promise<Song[]> {
 
     return searchResults;
   } catch (error) {
-    console.error("Error fetching songs:", error);
+    console.error('Error fetching songs:', error);
     return [];
+  }
+}
+
+// Get Spotify ID using listenbrainz's experimental API
+export async function getSpotifyId(song: Song): Promise<string | null> {
+  // TODO: Use MBID resolver after the entry to lists is made better
+  const url = `https://labs.api.listenbrainz.org/spotify-id-from-metadata/json?artist_name=${encodeURIComponent(song.artist.title)}&release_name=&track_name=${encodeURIComponent(song.title)}`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data[0].spotify_track_ids.length > 0) {
+      return data[0].spotify_track_ids[0];
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching Spotify ID:', error);
+    return null;
   }
 }

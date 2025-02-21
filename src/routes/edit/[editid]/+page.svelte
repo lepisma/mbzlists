@@ -4,14 +4,16 @@
   import debounce from 'lodash/debounce';
   import QrCode from '$lib/components/QrCode.svelte';
   import { loadEditableList, createList, saveList } from '$lib/ops';
-  import { getCoverArt, queryMB } from '$lib/mb';
-  import type { EditableList } from '$lib/types';
+  import { getCoverArt, queryMB, getSpotifyId } from '$lib/mb';
+  import type { EditableList, Song } from '$lib/types';
   import { formatDistanceToNow } from 'date-fns';
   import IconTrash from 'virtual:icons/la/trash';
   import IconDownload from 'virtual:icons/la/download';
   import IconEye from 'virtual:icons/la/eye';
   import IconPlay from 'virtual:icons/la/play';
   import IconCopy from 'virtual:icons/la/copy';
+  import IconYoutubeIcon from 'virtual:icons/logos/youtube-icon';
+  import IconSpotify from 'virtual:icons/logos/spotify';
 
   let list: EditableList = {
      viewId: '',
@@ -54,6 +56,15 @@
 
     searchResults = await queryMB(query);
     showDropdown = searchResults.length > 0;
+  }
+
+  async function playTrackOnSpotify(song: Song) {
+    let spotifyId = await getSpotifyId(song);
+    if (spotifyId) {
+      window.open(`https://open.spotify.com/track/${spotifyId}`, '_blank');
+    } else {
+      window.alert(`Not able to find the song ${song.title} on Spotify`);
+    }
   }
 
   const handleInput = debounce((e) => {
@@ -131,6 +142,10 @@
               <div class="font-medium"><a class="anchor" href={`https://musicbrainz.org/recording/${item.mbid}`}>{item.title}</a></div>
               <div class="text-sm"><a class="anchor" href={`https://musicbrainz.org/artist/${item.artist.mbid}`}>{item.artist.title}</a></div>
               <div class="text-sm text-gray-500"><a class="anchor" href={`https://musicbrainz.org/release/${item.release.mbid}`}>{item.release.title} ({item.release.date})</a></div>
+              <div class="mt-2 flex space-x-2">
+                <span><a class="anchor" href={`https://youtube.com/results?search_query=${encodeURIComponent(item.title + ' ' + item.artist.title)}`} target="_blank"><IconYoutubeIcon /></a></span>
+                <button on:click={async () => await playTrackOnSpotify(item)}><IconSpotify /></button>
+              </div>
             </div>
           </div>
           <button
