@@ -6,6 +6,8 @@ db.exec(`
     id TEXT PRIMARY KEY,
     edit_id TEXT,
     name TEXT,
+    created_on TEXT,
+    last_modified_on TEXT,
     items TEXT DEFAULT '[]'
 )`);
 

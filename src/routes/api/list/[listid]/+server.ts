@@ -40,12 +40,13 @@ async function generateXSPF(list: List) {
     .ele('title').txt(list.name).up()
     .ele('creator').txt('mbzlists').up()
     .ele('info').txt(`https://mbzlists.com/list/${list.viewId}`).up()
+    .ele('date').txt(list.createdOn.toISOString()).up()
     .ele('tracklist');
 
   for (const item of list.items) {
     root.ele('track')
       .ele('title').txt(item.title).up()
-      .ele('creator').txt(item.artist).up()
+      .ele('creator').txt(item.artist.title).up()
       .ele('album').txt(item.release.title).up()
       .ele('info').txt(`https://musicbrainz.org/recording/${item.mbid}`).up()
       .ele('location').txt(`https://musicbrainz.org/recording/${item.mbid}`).up()
@@ -66,8 +67,16 @@ export async function GET({ params, request }) {
       }
     });
   } else if (type === 'xspf') {
-    const list = db.prepare('SELECT id, name, items FROM lists WHERE id = ?').get(params.listid);
-    return new Response(await generateXSPF({...list, viewId: list.id, items: JSON.parse(list.items)}), {
+    const res: any = db.prepare('SELECT id, name, created_on, last_modified_on, items FROM lists WHERE id = ?').get(params.listid);
+    const list: List = {
+      ...res,
+      viewId: res.id,
+      items: JSON.parse(res.items),
+      createdOn: new Date(res.created_on),
+      lastModifiedOn: new Date(res.last_modified_on),
+    };
+
+    return new Response(await generateXSPF(list), {
       headers: {
         'Content-Type': 'application/xspf+xml',
         'Content-Disposition': `attachment; filename="${list.name}-${params.listid}.xspf"`
@@ -75,6 +84,14 @@ export async function GET({ params, request }) {
     })
   }
 
-  const list = db.prepare('SELECT name, items FROM lists WHERE id = ?').get(params.listid);
-  return json(list ? {...list, items: JSON.parse(list.items)} : {});
+  const res: any = db.prepare('SELECT id, name, created_on, last_modified_on, items FROM lists WHERE id = ?').get(params.listid);
+  const list: any = {
+    viewId: res.id,
+    name: res.name,
+    items: JSON.parse(res.items),
+    createdOn: res.created_on,
+    lastModifiedOn: res.last_modified_on,
+  };
+
+  return json(res ? list : {});
 }

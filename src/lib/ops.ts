@@ -1,9 +1,16 @@
+import { browser } from '$app/environment';
 import type { EditableList, List, Song } from './types';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function loadList(viewId: string): Promise<List> {
   let res = await fetch(`/api/list/${viewId}`);
-  return {...await res.json(), viewId: viewId};
+  let data = await res.json();
+
+  return {
+    ...data,
+    createdOn: new Date(data.createdOn),
+    lastModifiedOn: new Date(data.lastModifiedOn),
+  };
 }
 
 export async function loadEditableList(editId: string): Promise<EditableList> {
@@ -11,10 +18,9 @@ export async function loadEditableList(editId: string): Promise<EditableList> {
   let data = await res.json();
 
   return {
-    items: data.items,
-    viewId: data.id,
-    editId: editId,
-    name: data.name
+    ...data,
+    createdOn: new Date(data.createdOn),
+    lastModifiedOn: new Date(data.lastModifiedOn),
   };
 }
 
@@ -38,19 +44,45 @@ function deleteFromLocalStorage(list: EditableList) {
   )));
 }
 
+export function loadFromLocalStorage(): EditableList[] {
+  if (browser) {
+    let savedData = localStorage.getItem('lists');
+    if (savedData) {
+
+      return JSON.parse(savedData).map((it: any) => {
+        return {
+          ...it,
+          createdOn: new Date(it.createdOn),
+          lastModifiedOn: new Date(it.lastModifiedOn)
+        };
+      })
+    }
+  }
+
+  return [];
+}
+
 // Create a new list and save it in localstorage
 export async function createList(name: string, items: Song[]): Promise<EditableList> {
-  const list = {
+  const list: EditableList = {
     name: name,
     editId: uuidv4(),
     viewId: uuidv4(),
-    items: items
+    items: items,
+    createdOn: new Date(),
+    lastModifiedOn: new Date()
   };
 
   await fetch(`/api/edit/${list.editId}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ listid: list.viewId, name: list.name, items: list.items }),
+    body: JSON.stringify({
+      listid: list.viewId,
+      name: list.name,
+      items: list.items,
+      createdOn: list.createdOn.toISOString(),
+      lastModifiedOn: list.lastModifiedOn.toISOString()
+    }),
   });
 
   saveToLocalStorage(list);
@@ -61,7 +93,13 @@ export async function saveList(list: EditableList) {
   await fetch(`/api/edit/${list.editId}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name: list.name, items: list.items, listid: list.viewId }),
+    body: JSON.stringify({
+      listid: list.viewId,
+      name: list.name,
+      items: list.items,
+      createdOn: list.createdOn.toISOString(),
+      lastModifiedOn: list.lastModifiedOn.toISOString()
+    }),
   });
 
   // Also update name in local storage, in case it was changed

@@ -23,7 +23,6 @@ export async function queryMB(query: string): Promise<Song[]> {
   try {
     const res = await fetch(url);
     const data = await res.json();
-    console.log(data);
     let searchResults: Song[] = data.recordings?.map(rec => ({
       title: rec.title,
       artist: {

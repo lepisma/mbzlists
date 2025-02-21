@@ -1,9 +1,9 @@
 <script>
-  import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
-  import { createList, deleteList } from '$lib/ops';
+  import { createList, deleteList, loadFromLocalStorage } from '$lib/ops';
+  import { formatDistanceToNow } from 'date-fns';
 
-  let lists = browser ? JSON.parse(localStorage.getItem('lists') || '[]') : [];
+  let lists = loadFromLocalStorage();
   let listName = '';
 </script>
 
@@ -42,14 +42,14 @@
         <div class="flex items-center justify-between p-3 rounded-lg border">
           <div>
             <div class="font-medium"><a href={`/edit/${list.editId}`}>{list.name}</a></div>
+            <span class="text-sm text-gray-400" title={list.createdOn}>Created: {formatDistanceToNow(list.createdOn, { addSuffix: true })}, </span>
+            <span class="text-sm text-gray-400" title={list.lastModifiedOn}>Modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
           </div>
           <button
             type="button"
             on:click={async () => {
               await deleteList(list);
-              if (browser) {
-                lists = JSON.parse(localStorage.getItem('lists') || '[]');
-              }
+              lists = loadFromLocalStorage();
             }}
             class="btn btn-sm preset-filled-error-500"
             >

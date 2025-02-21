@@ -4,12 +4,16 @@
   import QrCode from '$lib/components/QrCode.svelte';
   import { loadList, createList } from '$lib/ops';
   import { getCoverArt } from '$lib/mb';
+  import type { List } from '$lib/types';
   import { goto } from '$app/navigation';
+  import { formatDistanceToNow } from 'date-fns';
 
-  let list = {
-     viewId: $page.params.listid,
-     name: '',
-     items: []
+  let list: List = {
+    viewId: $page.params.listid,
+    name: '',
+    items: [],
+    createdOn: new Date(),
+    lastModifiedOn: new Date(),
   };
 
   let searchQuery = '';
@@ -49,7 +53,7 @@
   }
 
   onMount(async () => {
-     list = await loadList(list.viewId);
+    list = await loadList(list.viewId);
   });
 </script>
 
@@ -64,7 +68,9 @@
     </h1>
 
     <h2 class="text-4xl font-semibold mb-2">{list.name}</h2>
-    <h3 class="text-l font-italic mb-4">Total {list.items.length} songs</h3>
+    <span class="text-sm text-gray-400" title={list.createdOn}>Created: {formatDistanceToNow(list.createdOn, { addSuffix: true })}, </span>
+    <span class="text-sm text-gray-400" title={list.lastModifiedOn}>Modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
+    <h3 class="text-l mt-2 font-italic mb-4">Total {list.items.length} songs</h3>
 
     <div class="flex space-x-4 mb-4">
       <button on:click={playAll} class="btn btn-sm preset-filled-primary-500" disabled>Play All</button>

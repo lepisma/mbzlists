@@ -20,11 +20,15 @@ export interface List {
   readonly viewId: string;
   readonly name: string;
   readonly items: readonly Song[];
+  readonly createdOn: Date;
+  readonly lastModifiedOn: Date;
 }
 
 export interface EditableList {
   readonly viewId: string;
   readonly editId: string,
+  readonly createdOn: Date;
+  lastModifiedOn: Date;
   name: string;
   items: Song[];
 }

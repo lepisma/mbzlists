@@ -5,12 +5,16 @@
   import QrCode from '$lib/components/QrCode.svelte';
   import { loadEditableList, createList, saveList } from '$lib/ops';
   import { getCoverArt, queryMB } from '$lib/mb';
+  import type { EditableList } from '$lib/types';
+  import { formatDistanceToNow } from 'date-fns';
 
-  let list = {
+  let list: EditableList = {
      viewId: '',
      editId: $page.params.editid,
      name: '',
-     items: []
+     items: [],
+     createdOn: new Date(),
+     lastModifiedOn: new Date(),
   };
 
   let searchQuery = '';
@@ -77,12 +81,13 @@
 
     <input
       type="text"
-      class="text-4xl font-semibold mb-2 bg-transparent border-0 border-b-2 border-gray-400 focus:ring-0 focus:border-primary-500 transition-colors"
+      class="text-4xl font-semibold mb-2 bg-transparent border-0 border-b-2 border-gray-400 focus:ring-0 focus:border-primary-500 transition-colors pl-0"
       bind:value={list.name}
       on:input={handleNameEdits}
       />
-
-    <h3 class="text-l font-italic mb-4">Total {list.items.length} songs</h3>
+    <span class="text-sm text-gray-400" title={list.createdOn}>Created: {formatDistanceToNow(list.createdOn, { addSuffix: true })}, </span>
+    <span class="text-sm text-gray-400" title={list.lastModifiedOn}>Modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
+    <h3 class="text-l mt-2 font-italic mb-4">Total {list.items.length} songs</h3>
 
     <div class="flex space-x-4 mb-4">
       <button on:click={playAll} class="btn btn-sm preset-filled-primary-500" disabled>Play All</button>
