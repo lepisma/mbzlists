@@ -111,7 +111,7 @@
       <p class="italic">Your list is empty. Search for songs to add!</p>
     {:else}
       {#each list.items as item, index}
-        <div class="flex items-center justify-between p-3 rounded-lg border shadow-md">
+        <div class="flex items-center justify-between p-3 rounded-blg border shadow-md">
           <div class="flex">
             <div>
               {#await getCoverArt(item.release.mbid)}
