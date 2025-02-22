@@ -14,6 +14,9 @@
   import IconCopy from 'virtual:icons/la/copy';
   import IconYoutubeIcon from 'virtual:icons/logos/youtube-icon';
   import IconSpotify from 'virtual:icons/logos/spotify';
+  import { overrideItemIdKeyNameBeforeInitialisingDndZones, dndzone } from 'svelte-dnd-action';
+  import { flip } from 'svelte/animate';
+  overrideItemIdKeyNameBeforeInitialisingDndZones('mbid');
 
   let list: EditableList = {
      viewId: '',
@@ -36,8 +39,8 @@
     searchQuery = '';
   }
 
-  async function removeItem(index) {
-    list.items = list.items.filter((_, i) => i !== index);
+  async function removeItem(mbid) {
+    list.items = list.items.filter(it => it.mbid !== mbid);
     list = {...list, lastModifiedOn: new Date()};
     await saveList(list);
   }
@@ -83,6 +86,12 @@
     });
   }
 
+  async function handleSort(e) {
+    list.items = e.detail.items;
+    list = {...list, lastModifiedOn: new Date()};
+    await saveList(list);
+  }
+
   onMount(async () => {
     list = await loadEditableList(list.editId);
   });
@@ -126,8 +135,9 @@
     {#if list.items.length === 0}
       <p class="italic">Your list is empty. Search for songs to add!</p>
     {:else}
-      {#each list.items as item, index}
-        <div class="flex items-center justify-between p-3 rounded-blg border shadow-md">
+      <section use:dndzone={{ items: list.items, flipDurationMs: 200 }} on:consider={handleSort} on:finalize={handleSort}>
+      {#each list.items as item(item.mbid)}
+        <div class="flex items-center justify-between p-3 rounded-blg border shadow-md" animate:flip={{duration: 200}}>
           <div class="flex">
             <div>
               {#await getCoverArt(item.release.mbid)}
@@ -150,13 +160,14 @@
           </div>
           <button
             type="button"
-              on:click={async () => await removeItem(index)}
+              on:click={async () => await removeItem(item.mbid)}
               class="btn preset-filled-error-500"
             >
             <IconTrash />
           </button>
         </div>
       {/each}
+      </section>
     {/if}
   </div>
 
