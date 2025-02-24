@@ -36,6 +36,15 @@
     });
   }
 
+  function formatDuration(song: Song) {
+    if (song.length) {
+      let minutes = song.length / 60000;
+      return `${Math.floor(minutes)}:${Math.floor(100 * (minutes % 1))}`;
+    } else {
+      return '';
+    }
+  }
+
   async function playTrackOnSpotify(song: Song) {
     let spotifyId = await getSpotifyId(song);
     if (spotifyId) {
@@ -113,7 +122,9 @@
             <img src="https://placehold.co/100?text=NA" alt="" class="w-16 h-16 mr-2 object-cover rounded-md" />
           {/await}
           <div>
-            <div class="font-medium"><a class="anchor" href={`https://musicbrainz.org/recording/${item.mbid}`}>{item.title}</a></div>
+            <div class="font-medium"><a class="anchor" href={`https://musicbrainz.org/recording/${item.mbid}`}>{item.title}</a>
+              <span class="text-sm text-gray-500">{formatDuration(item)}</span>
+            </div>
             <div class="text-sm"><a class="anchor" href={`https://musicbrainz.org/artist/${item.artist.mbid}`}>{item.artist.title}</a></div>
             <div class="text-sm text-gray-500"><a class="anchor" href={`https://musicbrainz.org/release/${item.release.mbid}`}>{item.release.title} ({item.release.date})</a></div>
             <div class="mt-2 flex space-x-2">
