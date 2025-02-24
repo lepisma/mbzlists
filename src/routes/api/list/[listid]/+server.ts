@@ -1,38 +1,8 @@
 import db from '$lib/server/db';
 import type { List } from '$lib/types';
 import { json } from '@sveltejs/kit';
-import nodeCanvas from 'canvas';
-import { JSDOM } from 'jsdom';
 import { create as createXML } from 'xmlbuilder2';
 
-import QRCodeStyling from 'qr-code-styling';
-
-async function generateQrCode(viewId: string) {
-  let qrCode = new QRCodeStyling({
-    jsdom: JSDOM,
-    nodeCanvas: nodeCanvas,
-    width: 300,
-    height: 300,
-    data: `https://mbzlists.com/list/${viewId}`,
-    // TODO: This needs fixing
-    image: './static/mb-logo.png',
-    dotsOptions: {
-      color: '#bb4590',
-      type: 'rounded'
-    },
-    cornersDotOptions: {
-      color: '#ec7538'
-    },
-    cornersSquareOptions: {
-      color: '#ec7538'
-    },
-    backgroundOptions: {
-      color: 'transparent'
-    },
-  });
-
-  return await qrCode.getRawData('png');
-}
 
 async function generateXSPF(list: List) {
   const root = createXML({ version: '1.0', encoding: 'UTF-8' })
@@ -60,13 +30,7 @@ export async function GET({ params, request }) {
   const url = new URL(request.url);
   const type = url.searchParams.get('type');
 
-  if (type === 'qr') {
-    return new Response(await generateQrCode(params.listid), {
-      headers: {
-        'Content-Type': 'image/png'
-      }
-    });
-  } else if (type === 'xspf') {
+  if (type === 'xspf') {
     const res: any = db.prepare('SELECT id, name, created_on, last_modified_on, items FROM lists WHERE id = ?').get(params.listid);
     const list: List = {
       ...res,

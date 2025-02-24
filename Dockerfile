@@ -4,7 +4,6 @@ WORKDIR /app
 
 COPY . .
 
-RUN apk add --no-cache build-base python3 pkgconf pixman-dev cairo-dev pango-dev libjpeg-turbo-dev giflib-dev
 RUN npm ci
 RUN npm run build
 
