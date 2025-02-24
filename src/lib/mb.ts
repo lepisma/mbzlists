@@ -34,7 +34,8 @@ export async function queryMB(query: string): Promise<Song[]> {
         date: rec['releases']?.[0]?.date,
         mbid: rec['releases']?.[0]?.id,
         title: rec['releases']?.[0]?.title
-      }
+      },
+      length: rec.length
     })) || [];
 
     return searchResults;

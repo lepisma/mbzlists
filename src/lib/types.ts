@@ -14,6 +14,7 @@ export interface Song {
   title: string;
   artist: Artist;
   release: Release;
+  length?: number;
 }
 
 export interface List {
