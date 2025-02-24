@@ -1,8 +1,0 @@
-services:
-  mbzlists:
-    image: mbzlists:latest
-    restart: always
-    volumes:
-      - "./data:/data"
-    ports:
-      - "5555:3000"

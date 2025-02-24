@@ -1,3 +1,13 @@
 #+title: mbzlists
 
 Self hosted universal playlists manager based on Musicbrainz IDs.
+
+Mount a data directory for keeping the SQLite database like the following:
+
+#+begin_src shell
+docker run -d \
+  -v "$(pwd)/data:/data" \
+  -p 3000:3000 \
+  --name mbzlists \
+  mbzlists:latest
+#+end_src
