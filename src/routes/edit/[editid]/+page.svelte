@@ -3,6 +3,8 @@
   import { onMount } from 'svelte';
   import debounce from 'lodash/debounce';
   import QrCode from '$lib/components/QrCode.svelte';
+  import SongDuration from '$lib/components/SongDuration.svelte';
+  import PlayListDuration from '$lib/components/PlayListDuration.svelte';
   import { loadEditableList, createList, saveList } from '$lib/ops';
   import { getCoverArt, queryMB, getSpotifyId } from '$lib/mb';
   import type { EditableList, Song } from '$lib/types';
@@ -37,15 +39,6 @@
     await saveList(list);
     showDropdown = false;
     searchQuery = '';
-  }
-
-  function formatDuration(song: Song) {
-    if (song.length) {
-      let minutes = song.length / 60000;
-      return `${Math.floor(minutes)}:${Math.floor(100 * (minutes % 1))}`;
-    } else {
-      return '';
-    }
   }
 
   async function removeItem(mbid) {
@@ -124,7 +117,7 @@
       />
     <span class="text-sm text-gray-400" title={list.createdOn}>Created: {formatDistanceToNow(list.createdOn, { addSuffix: true })}, </span>
     <span class="text-sm text-gray-400" title={list.lastModifiedOn}>Modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
-    <h3 class="text-l mt-2 font-italic mb-4">Total {list.items.length} songs</h3>
+    <h3 class="text-l mt-2 font-italic mb-4">Total {list.items.length} songs. Duration <PlayListDuration list={list} />.</h3>
 
     <div class="flex space-x-4 mb-4">
       <button on:click={playAll} class="btn btn-sm preset-filled-primary-500" disabled><IconPlay/></button>
@@ -159,7 +152,7 @@
             </div>
             <div>
               <div class="font-medium"><a class="anchor" href={`https://musicbrainz.org/recording/${item.mbid}`}>{item.title}</a>
-                <span class="text-sm text-gray-500">{formatDuration(item)}</span>
+                <span class="text-sm text-gray-500"><SongDuration song={item} /></span>
               </div>
               <div class="text-sm"><a class="anchor" href={`https://musicbrainz.org/artist/${item.artist.mbid}`}>{item.artist.title}</a></div>
               <div class="text-sm text-gray-500"><a class="anchor" href={`https://musicbrainz.org/release/${item.release.mbid}`}>{item.release.title} ({item.release.date})</a></div>
