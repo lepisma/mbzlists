@@ -4,9 +4,8 @@
 
   let { viewId } = $props();
 
-  let qrCode;
   onMount(() => {
-    qrCode = new QRCodeStyling({
+    let qrCode = new QRCodeStyling({
       width: 150,
       height: 150,
       data: `https://mbzlists.com/list/${viewId}`,

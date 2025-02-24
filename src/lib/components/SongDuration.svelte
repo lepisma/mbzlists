@@ -1,7 +1,7 @@
 <script lang='ts'>
   let { song } = $props();
 
-  function calculateDuration() {
+  let duration = $derived.by(() => {
     if (song.length) {
       let totalSeconds = Math.floor(song.length / 1000);
       let minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
@@ -11,7 +11,7 @@
     } else {
       return '';
     }
-  }
+  });
 </script>
 
-<span>{calculateDuration()}</span>
+<span>{duration}</span>

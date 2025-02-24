@@ -20,18 +20,18 @@
   import { flip } from 'svelte/animate';
   overrideItemIdKeyNameBeforeInitialisingDndZones('mbid');
 
-  let list: EditableList = {
+  let list: EditableList = $state({
      viewId: '',
      editId: $page.params.editid,
      name: '',
      items: [],
      createdOn: new Date(),
      lastModifiedOn: new Date(),
-  };
+  });
 
-  let searchQuery = '';
-  let searchResults = [];
-  let showDropdown = false;
+  let searchQuery = $state('');
+  let searchResults = $state([]);
+  let showDropdown = $state(false);
 
   async function addItem(item) {
     list.items = [...list.items, item];
@@ -113,15 +113,15 @@
       type="text"
       class="text-4xl font-semibold mb-2 bg-transparent border-0 border-b-2 border-gray-400 focus:ring-0 focus:border-primary-500 transition-colors pl-0"
       bind:value={list.name}
-      on:input={handleNameEdits}
+      oninput={handleNameEdits}
       />
     <span class="text-sm text-gray-400" title={list.createdOn}>Created: {formatDistanceToNow(list.createdOn, { addSuffix: true })}, </span>
     <span class="text-sm text-gray-400" title={list.lastModifiedOn}>Modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
     <h3 class="text-l mt-2 font-italic mb-4">Total {list.items.length} songs. Duration <PlayListDuration list={list} />.</h3>
 
     <div class="flex space-x-4 mb-4">
-      <button on:click={playAll} class="btn btn-sm preset-filled-primary-500" disabled><IconPlay/></button>
-      <button on:click={cloneList} class="btn btn-sm preset-filled-primary-500"><IconCopy />Make a Copy</button>
+      <button onclick={playAll} class="btn btn-sm preset-filled-primary-500" disabled><IconPlay/></button>
+      <button onclick={cloneList} class="btn btn-sm preset-filled-primary-500"><IconCopy />Make a Copy</button>
       <a href={`/api/list/${list.viewId}?type=xspf`} class="btn btn-sm preset-filled-primary-500"><IconDownload />XSPF</a>
       <a href={`/list/${list.viewId}`} class="btn btn-sm preset-filled-primary-500"><IconEye />View Link</a>
     </div>
@@ -137,7 +137,7 @@
     {#if list.items.length === 0}
       <p class="italic">Your list is empty. Search for songs to add!</p>
     {:else}
-      <section use:dndzone={{ items: list.items, flipDurationMs: 200 }} on:consider={handleSort} on:finalize={handleSort}>
+      <section use:dndzone={{ items: list.items, flipDurationMs: 200 }} onconsider={handleSort} onfinalize={handleSort}>
       {#each list.items as item(item.mbid)}
         <div class="flex items-center justify-between p-3 rounded-blg border shadow-md" animate:flip={{duration: 200}}>
           <div class="flex">
@@ -158,13 +158,13 @@
               <div class="text-sm text-gray-500"><a class="anchor" href={`https://musicbrainz.org/release/${item.release.mbid}`}>{item.release.title} ({item.release.date})</a></div>
               <div class="mt-2 flex space-x-2">
                 <span><a class="anchor" href={`https://youtube.com/results?search_query=${encodeURIComponent(item.title + ' ' + item.artist.title)}`} target="_blank"><IconYoutubeIcon /></a></span>
-                <button on:click={async () => await playTrackOnSpotify(item)}><IconSpotify /></button>
+                <button onclick={async () => await playTrackOnSpotify(item)}><IconSpotify /></button>
               </div>
             </div>
           </div>
           <button
             type="button"
-              on:click={async () => await removeItem(item.mbid)}
+              onclick={async () => await removeItem(item.mbid)}
               class="btn preset-filled-error-500"
             >
             <IconTrash />
@@ -178,8 +178,8 @@
   <div class="relative mb-6 col-span-full">
       <input
         type="text"
-        on:input={handleInput}
-        on:focus={() => showDropdown = true}
+        oninput={handleInput}
+        onfocus={() => showDropdown = true}
       placeholder="Search songs using Musicbrainz lucene syntax..."
       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent"
       >
@@ -188,7 +188,7 @@
               {#each searchResults as song}
                   <div
                       class="p-3 hover:bg-gray-100 cursor-pointer"
-                      on:click={async () => await addItem(song)}
+                      onclick={async () => await addItem(song)}
                       >
                       <div class="font-medium">{song.title}</div>
                       <div class="text-sm text-gray-600">{song.artist.title}</div>

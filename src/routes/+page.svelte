@@ -5,8 +5,8 @@
   import IconPlusCircle from 'virtual:icons/la/plus-circle';
   import IconTrash from 'virtual:icons/la/trash';
 
-  let lists = loadFromLocalStorage();
-  let listName = '';
+  let lists = $state(loadFromLocalStorage());
+  let listName = $state('');
 </script>
 
 <svelte:head>
@@ -26,7 +26,7 @@
     <div>
       <div class="flex items-center ml-1">
 	<input type="search" class="w-full border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 input" bind:value={listName} placeholder="List Name" />
-        <button on:click={async () => {
+        <button onclick={async () => {
             let list = await createList(listName, []);
             goto(`/edit/${list.editId}`);
           }} class="btn preset-filled-primary-500 ml-2">
@@ -49,7 +49,7 @@
           </div>
           <button
             type="button"
-            on:click={async () => {
+            onclick={async () => {
               await deleteList(list);
               lists = loadFromLocalStorage();
             }}

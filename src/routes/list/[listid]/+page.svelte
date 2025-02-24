@@ -15,17 +15,13 @@
   import IconYoutubeIcon from 'virtual:icons/logos/youtube-icon';
   import IconSpotify from 'virtual:icons/logos/spotify';
 
-  let list: List = {
+  let list: List = $state({
     viewId: $page.params.listid,
     name: '',
     items: [],
     createdOn: new Date(),
     lastModifiedOn: new Date(),
-  };
-
-  let searchQuery = '';
-  let searchResults = [];
-  let showDropdown = false;
+  });
 
   async function cloneList() {
     let clonedList = await createList(`Copy of ${list.name}`, list.items);
@@ -45,27 +41,6 @@
     } else {
       window.alert(`Not able to find the song ${song.title} on Spotify`);
     }
-  }
-
-  function exportJSPF() {
-    const jspf = {
-      playlist: {
-        title: list.name,
-        track: list.items.map(song => ({
-          title: song.title,
-          creator: song.artist,
-          identifier: `https://musicbrainz.org/recording/${song.mbid}`
-        }))
-      }
-    };
-
-    const blob = new Blob([JSON.stringify(jspf, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `${listTitle.replace(/\s+/g, "_")}.jspf`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
   }
 
   onMount(async () => {
@@ -89,8 +64,8 @@
     <h3 class="text-l mt-2 font-italic mb-4">Total {list.items.length} songs. Duration <PlayListDuration list={list} />.</h3>
 
     <div class="flex space-x-4 mb-4">
-      <button on:click={playAll} class="btn btn-sm preset-filled-primary-500" disabled><IconPlay/></button>
-      <button on:click={cloneList} class="btn btn-sm preset-filled-primary-500"><IconCopy />Make a Copy</button>
+      <button onclick={playAll} class="btn btn-sm preset-filled-primary-500" disabled><IconPlay/></button>
+      <button onclick={cloneList} class="btn btn-sm preset-filled-primary-500"><IconCopy />Make a Copy</button>
       <a href={`/api/list/${list.viewId}?type=xspf`} class="btn btn-sm preset-filled-primary-500"><IconDownload />XSPF</a>
     </div>
   </div>
@@ -122,7 +97,7 @@
             <div class="text-sm text-gray-500"><a class="anchor" href={`https://musicbrainz.org/release/${item.release.mbid}`}>{item.release.title} ({item.release.date})</a></div>
             <div class="mt-2 flex space-x-2">
               <span><a class="anchor" href={`https://youtube.com/results?search_query=${encodeURIComponent(item.title + ' ' + item.artist.title)}`} target="_blank"><IconYoutubeIcon /></a></span>
-              <button on:click={async () => await playTrackOnSpotify(item)}><IconSpotify /></button>
+              <button onclick={async () => await playTrackOnSpotify(item)}><IconSpotify /></button>
             </div>
           </div>
         </div>
