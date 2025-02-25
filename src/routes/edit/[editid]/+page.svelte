@@ -175,25 +175,24 @@
       </section>
     {/if}
   </div>
-
   <div class="relative mb-6 col-span-full">
       <input
         type="text"
         oninput={handleInput}
         onfocus={() => showDropdown = true}
-      placeholder="Search songs using Musicbrainz lucene syntax..."
-      class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent"
+        placeholder="Search songs using MusicBrainz Lucene syntax..."
+        class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-400 focus:border-transparent outline-none"
       >
       {#if showDropdown && searchResults.length > 0}
-          <div class="absolute w-full bg-white mt-1 rounded-lg shadow-lg border max-h-60 overflow-y-auto z-10">
+          <div class="absolute w-full bg-white dark:bg-gray-800 mt-1 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 max-h-60 overflow-y-auto z-10">
               {#each searchResults as song}
                   <div
-                      class="p-3 hover:bg-gray-100 cursor-pointer"
+                      class="p-3 hover:bg-primary-100 dark:hover:bg-primary-700 cursor-pointer transition-colors duration-150"
                       onclick={async () => await addItem(song)}
                       >
-                      <div class="font-medium">{song.title}</div>
-                      <div class="text-sm text-gray-600">{song.artist.title}</div>
-                      <div class="text-sm text-gray-500">{song.release.title} ({song.release.date})</div>
+                      <div class="font-medium text-gray-900 dark:text-gray-100">{song.title}</div>
+                      <div class="text-sm text-gray-500 dark:text-gray-200">{song.artist.title}</div>
+                      <div class="text-sm text-gray-500 dark:text-gray-200">{song.release.title} ({song.release.date})</div>
                   </div>
               {/each}
           </div>
