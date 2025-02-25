@@ -14,7 +14,7 @@ export function GET({ params }) {
       lastModifiedOn: res.last_modified_on,
       description: res.description,
       coverArt: res.cover_art,
-      isPublic: res.is_public,
+      isPublic: res.is_public === 1,
     });
   } else {
     return json({ success: false }, { status: 500 });
@@ -76,7 +76,7 @@ export async function PATCH({ params, request }) {
 
   if (isPublic !== undefined) {
     updates.push('is_public = ?');
-    values.push(isPublic);
+    values.push(isPublic ? 1 : 0);
   }
 
   if (coverArt !== undefined) {

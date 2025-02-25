@@ -55,7 +55,7 @@ export async function GET({ params, request }) {
     lastModifiedOn: res.last_modified_on,
     description: res.description,
     coverArt: res.cover_art,
-    isPublic: res.is_public,
+    isPublic: res.is_public === 1,
   };
 
   return json(res ? list : {});
