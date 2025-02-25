@@ -1,6 +1,7 @@
 import { browser } from '$app/environment';
-import type { EditableList, List, Song } from './types';
+import type { EditableList, EditableListMetadata, List, ListMetadata, Song } from './types';
 import { v4 as uuidv4 } from 'uuid';
+import { recallItems, rememberItem, forgetItem } from '$lib/utils';
 
 export async function loadList(viewId: string): Promise<List> {
   let res = await fetch(`/api/list/${viewId}`);
@@ -24,42 +25,49 @@ export async function loadEditableList(editId: string): Promise<EditableList> {
   };
 }
 
-function saveToLocalStorage(list: EditableList) {
-  let lists = JSON.parse(localStorage.getItem('lists') || '[]');
-  lists.push(list);
-  localStorage.setItem('lists', JSON.stringify(lists));
+async function loadListMetadata(viewId: string): Promise<ListMetadata> {
+  let res = await fetch(`/api/metadata/list/${viewId}`);
+  let data = await res.json();
+
+  return {
+    ...data,
+    createdOn: new Date(data.createdOn),
+    lastModifiedOn: new Date(data.lastModifiedOn),
+  };
 }
 
-function updateLocalStorage(list: EditableList) {
-  let lists = JSON.parse(localStorage.getItem('lists') || '[]');
-  localStorage.setItem('lists', JSON.stringify(lists.map((item: EditableList) =>
-    item.editId === list.editId ? list : item
-  )));
+async function loadEditableListMetadata(editId: string): Promise<EditableListMetadata> {
+  let res = await fetch(`/api/metadata/edit/${editId}`);
+  let data = await res.json();
+
+  return {
+    ...data,
+    createdOn: new Date(data.createdOn),
+    lastModifiedOn: new Date(data.lastModifiedOn),
+  };
 }
 
-function deleteFromLocalStorage(list: EditableList) {
-  let lists = JSON.parse(localStorage.getItem('lists') || '[]');
-  localStorage.setItem('lists', JSON.stringify(lists.filter((item: EditableList) =>
-    item.editId !== list.editId
-  )));
-}
-
-export function loadFromLocalStorage(): EditableList[] {
+// Load list with edit-ids saved locally and fetch metadata to show
+export async function recallEditableLists(): Promise<EditableListMetadata[]> {
   if (browser) {
-    let savedData = localStorage.getItem('lists');
-    if (savedData) {
-
-      return JSON.parse(savedData).map((it: any) => {
-        return {
-          ...it,
-          createdOn: new Date(it.createdOn),
-          lastModifiedOn: new Date(it.lastModifiedOn)
-        };
-      })
-    }
+    let editIds = recallItems('editableItems').map(ids => ids.editId);
+    return Promise.all(editIds.map(editId => loadEditableListMetadata(editId)));
   }
 
-  return [];
+  return Promise.resolve([]);
+}
+
+// Load list with view-ids saved locally (removing items already saved as editable) and fetch metadata to show
+export async function recallViewableLists(): Promise<ListMetadata[]> {
+  if (browser) {
+    let viewIds = recallItems('viewableItems');
+    let viewIdsFromEdits = recallItems('editableItems').map(ids => ids.viewId);
+    viewIds = viewIds.filter(id => !viewIdsFromEdits.includes(id));
+
+    return Promise.all(viewIds.map(viewId => loadListMetadata(viewId)));
+  }
+
+  return Promise.resolve([]);
 }
 
 // Create a new list and save it in localstorage
@@ -84,12 +92,12 @@ export async function createList(name: string, items: Song[]): Promise<EditableL
     }),
   });
 
-  saveToLocalStorage(list);
+  rememberItem('editableItems', { editId: list.editId, viewId: list.viewId }, ids => ids.editId);
   return list;
 }
 
 export async function saveList(list: EditableList) {
-  // TODO: Breakdown this function for partial updates
+  // TODO: Break this function down for partial updates
   await fetch(`/api/edit/${list.editId}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
@@ -102,9 +110,6 @@ export async function saveList(list: EditableList) {
       coverArt: list.coverArt,
     }),
   });
-
-  // Also update properties in local storage, in case it was changed
-  updateLocalStorage(list);
 }
 
 export async function deleteList(list: EditableList) {
@@ -112,5 +117,5 @@ export async function deleteList(list: EditableList) {
     method: 'DELETE'
   });
 
-  deleteFromLocalStorage(list);
+  forgetItem('editableItems', { editId: list.editId, viewId: list.viewId }, ids => ids.editId);
 }

@@ -1,14 +1,23 @@
-<script>
+<script lang='ts'>
+  import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
-  import { createList, deleteList, loadFromLocalStorage } from '$lib/ops';
+  import { createList, deleteList, recallEditableLists, recallViewableLists } from '$lib/ops';
   import { formatDistanceToNow } from 'date-fns';
   import IconPlusCircle from 'virtual:icons/la/plus-circle';
   import IconTrash from 'virtual:icons/la/trash';
   import { Tabs } from '@skeletonlabs/skeleton-svelte';
 
-  let lists = $state(loadFromLocalStorage());
+  let editableLists = $state([]);
+  let viewableLists = $state([]);
+  let publicLists = $state([]);
+
   let listName = $state('');
   let group = $state('mylists');
+
+  onMount(async () => {
+    editableLists = await recallEditableLists();
+    viewableLists = await recallViewableLists();
+  });
 </script>
 
 <svelte:head>
@@ -40,7 +49,7 @@
       {#snippet content()}
       <Tabs.Panel value="mylists">
         <h3 class="mb-4 italic">
-          Total {lists.length} playlists remembered on this device. These are lists that you can edit.
+          Total {editableLists.length} playlists remembered on this device. These are lists that you can edit.
         </h3>
 
         <div class="mb-5">
@@ -56,10 +65,8 @@
         </div>
 
         <div class="space-y-2 col-span-full">
-          {#if lists.length === 0}
-            <p class="italic">Your have no playlist!</p>
-          {:else}
-            {#each lists as list}
+          {#if editableLists.length > 0}
+            {#each editableLists as list}
               <div class="flex items-center justify-between p-3 rounded-lg border">
                 <div>
                   <div class="font-medium"><a href={`/edit/${list.editId}`}>{list.name}</a></div>
@@ -69,8 +76,8 @@
                 <button
                   type="button"
                   onclick={async () => {
-                  await deleteList(list);
-                  lists = loadFromLocalStorage();
+                    await deleteList(list);
+                    editableLists = await recallEditableLists();
                   }}
                   class="btn preset-filled-error-500">
                   <IconTrash />
@@ -81,10 +88,42 @@
         </div>
       </Tabs.Panel>
       <Tabs.Panel value="shared">
-        <p class="italic">No shared lists! When you open a list via a view-only link, they get saved here.</p>
+        <h3 class="mb-4 italic">
+          Total {viewableLists.length} view-only playlists remembered on this device.
+        </h3>
+
+        <div class="space-y-2 col-span-full">
+          {#if viewableLists.length > 0}
+            {#each viewableLists as list}
+              <div class="flex items-center justify-between p-3 rounded-lg border">
+                <div>
+                  <div class="font-medium"><a href={`/edit/${list.editId}`}>{list.name}</a></div>
+                  <span class="text-sm text-gray-400" title={list.createdOn}>Created: {formatDistanceToNow(list.createdOn, { addSuffix: true })}, </span>
+                  <span class="text-sm text-gray-400" title={list.lastModifiedOn}>Modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
+                </div>
+              </div>
+            {/each}
+          {/if}
+        </div>
       </Tabs.Panel>
       <Tabs.Panel value="public">
-        <p class="italic">No public playlists on this server!</p>
+        <h3 class="mb-4 italic">
+          Total {editableLists.length} public playlists. These are lists that people have listed on this server.
+        </h3>
+
+        <div class="space-y-2 col-span-full">
+          {#if publicLists.length > 0}
+            {#each publicLists as list}
+              <div class="flex items-center justify-between p-3 rounded-lg border">
+                <div>
+                  <div class="font-medium"><a href={`/edit/${list.editId}`}>{list.name}</a></div>
+                  <span class="text-sm text-gray-400" title={list.createdOn}>Created: {formatDistanceToNow(list.createdOn, { addSuffix: true })}, </span>
+                  <span class="text-sm text-gray-400" title={list.lastModifiedOn}>Modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
+                </div>
+              </div>
+            {/each}
+          {/if}
+        </div>
       </Tabs.Panel>
       {/snippet}
     </Tabs>

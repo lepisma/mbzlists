@@ -28,6 +28,16 @@ export interface List {
   readonly isPublic: boolean;
 }
 
+export interface ListMetadata {
+  readonly viewId: string;
+  readonly name: string;
+  readonly createdOn: Date;
+  readonly lastModifiedOn: Date;
+  readonly coverArt?: Blob;
+  readonly description?: string;
+  readonly isPublic: boolean;
+}
+
 export interface EditableList {
   readonly viewId: string;
   readonly editId: string,
@@ -38,4 +48,15 @@ export interface EditableList {
   coverArt?: Blob;
   description?: string;
   isPublic: boolean;
+}
+
+export interface EditableListMetadata {
+  readonly viewId: string;
+  readonly editId: string,
+  readonly createdOn: Date;
+  readonly lastModifiedOn: Date;
+  readonly name: string;
+  readonly coverArt?: Blob;
+  readonly description?: string;
+  readonly isPublic: boolean;
 }
