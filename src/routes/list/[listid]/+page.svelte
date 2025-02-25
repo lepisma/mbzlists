@@ -4,8 +4,9 @@
   import QrCode from '$lib/components/QrCode.svelte';
   import SongDuration from '$lib/components/SongDuration.svelte';
   import PlayListDuration from '$lib/components/PlayListDuration.svelte';
-  import { loadList, createList } from '$lib/ops';
+  import { loadList, createList,  } from '$lib/ops';
   import { getCoverArt, getSpotifyId } from '$lib/mb';
+  import { rememberItem } from '$lib/utils';
   import type { List, Song } from '$lib/types';
   import { goto } from '$app/navigation';
   import { formatDistanceToNow } from 'date-fns';
@@ -46,6 +47,8 @@
 
   onMount(async () => {
     list = await loadList(list.viewId);
+    // Every list that we view is remembered
+    rememberItem('viewableItems', list.viewId, id => id);
   });
 </script>
 
