@@ -23,6 +23,9 @@ export interface List {
   readonly items: readonly Song[];
   readonly createdOn: Date;
   readonly lastModifiedOn: Date;
+  readonly coverArt?: Blob;
+  readonly description?: string;
+  readonly isPublic: boolean;
 }
 
 export interface EditableList {
@@ -32,4 +35,7 @@ export interface EditableList {
   lastModifiedOn: Date;
   name: string;
   items: Song[];
+  coverArt?: Blob;
+  description?: string;
+  isPublic: boolean;
 }

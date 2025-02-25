@@ -1,10 +1,9 @@
 import db from '$lib/server/db';
-import type { List } from '$lib/types';
 import { json } from '@sveltejs/kit';
 import { create as createXML } from 'xmlbuilder2';
 
 
-async function generateXSPF(list: List) {
+async function generateXSPF(list) {
   const root = createXML({ version: '1.0', encoding: 'UTF-8' })
     .ele('playlist', { version: '1', xmlns: 'http://xspf.org/ns/0' })
     .ele('title').txt(list.name).up()
@@ -31,30 +30,32 @@ export async function GET({ params, request }) {
   const type = url.searchParams.get('type');
 
   if (type === 'xspf') {
-    const res: any = db.prepare('SELECT id, name, created_on, last_modified_on, items FROM lists WHERE id = ?').get(params.listid);
-    const list: List = {
+    const res: any = db.prepare('SELECT id, name, created_on, items FROM lists WHERE id = ?').get(params.listid);
+
+    return new Response(await generateXSPF({
       ...res,
       viewId: res.id,
       items: JSON.parse(res.items),
-      createdOn: new Date(res.created_on),
-      lastModifiedOn: new Date(res.last_modified_on),
-    };
-
-    return new Response(await generateXSPF(list), {
+      createdOn: new Date(res.created_on)
+    }), {
       headers: {
         'Content-Type': 'application/xspf+xml',
-        'Content-Disposition': `attachment; filename="${list.name}-${params.listid}.xspf"`
+        'Content-Disposition': `attachment; filename="${res.name}-${params.listid}.xspf"`
       }
     })
   }
 
-  const res: any = db.prepare('SELECT id, name, created_on, last_modified_on, items FROM lists WHERE id = ?').get(params.listid);
+  const res: any = db.prepare('SELECT id, name, created_on, last_modified_on, description, cover_art, is_public, items FROM lists WHERE id = ?').get(params.listid);
+
   const list: any = {
     viewId: res.id,
     name: res.name,
     items: JSON.parse(res.items),
     createdOn: res.created_on,
     lastModifiedOn: res.last_modified_on,
+    description: res.description,
+    coverArt: res.cover_art,
+    isPublic: res.is_public,
   };
 
   return json(res ? list : {});

@@ -70,18 +70,17 @@ export async function createList(name: string, items: Song[]): Promise<EditableL
     viewId: uuidv4(),
     items: items,
     createdOn: new Date(),
-    lastModifiedOn: new Date()
+    lastModifiedOn: new Date(),
+    isPublic: false,
   };
 
   await fetch(`/api/edit/${list.editId}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      listid: list.viewId,
-      name: list.name,
-      items: list.items,
+      ...list,
       createdOn: list.createdOn.toISOString(),
-      lastModifiedOn: list.lastModifiedOn.toISOString()
+      lastModifiedOn: list.lastModifiedOn.toISOString(),
     }),
   });
 
@@ -90,15 +89,17 @@ export async function createList(name: string, items: Song[]): Promise<EditableL
 }
 
 export async function saveList(list: EditableList) {
+  // TODO: Breakdown this function for partial updates
   await fetch(`/api/edit/${list.editId}`, {
-    method: 'POST',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      listid: list.viewId,
       name: list.name,
       items: list.items,
-      createdOn: list.createdOn.toISOString(),
-      lastModifiedOn: list.lastModifiedOn.toISOString()
+      lastModifiedOn: list.lastModifiedOn.toISOString(),
+      description: list.description,
+      isPublic: list.isPublic,
+      coverArt: list.coverArt,
     }),
   });
 

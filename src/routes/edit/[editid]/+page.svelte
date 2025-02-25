@@ -27,6 +27,7 @@
      items: [],
      createdOn: new Date(),
      lastModifiedOn: new Date(),
+     isPublic: false,
   });
 
   let searchQuery = $state('');
