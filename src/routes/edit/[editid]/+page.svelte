@@ -8,6 +8,7 @@
   import { loadEditableList, createList, saveList } from '$lib/ops';
   import { getCoverArt, queryMB, getSpotifyId } from '$lib/mb';
   import type { EditableList, Song } from '$lib/types';
+  import { rememberItem } from '$lib/utils';
   import { formatDistanceToNow } from 'date-fns';
   import IconTrash from 'virtual:icons/la/trash';
   import IconDownload from 'virtual:icons/la/download';
@@ -97,6 +98,9 @@
 
   onMount(async () => {
     list = await loadEditableList(list.editId);
+
+    // Every list that we view is remembered
+    rememberItem('editableItems', { editId: list.editId, viewId: list.viewId }, ids => ids.editId);
   });
 </script>
 
