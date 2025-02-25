@@ -25,6 +25,19 @@ export async function loadEditableList(editId: string): Promise<EditableList> {
   };
 }
 
+export async function loadPublicLists(): Promise<List[]> {
+  let res = await fetch(`/api/list/`);
+  let data = await res.json();
+
+  return data.map(it => {
+    return {
+      ...it,
+      createdOn: new Date(it.createdOn),
+      lastModifiedOn: new Date(it.lastModifiedOn),
+    }
+  });
+}
+
 async function loadListMetadata(viewId: string): Promise<ListMetadata> {
   let res = await fetch(`/api/metadata/list/${viewId}`);
   let data = await res.json();

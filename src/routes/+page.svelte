@@ -1,10 +1,13 @@
 <script lang='ts'>
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
-  import { createList, deleteList, recallEditableLists, recallViewableLists } from '$lib/ops';
+  import { createList, deleteList, recallEditableLists, recallViewableLists, loadPublicLists } from '$lib/ops';
   import { formatDistanceToNow } from 'date-fns';
   import IconPlusCircle from 'virtual:icons/la/plus-circle';
   import IconTrash from 'virtual:icons/la/trash';
+  import IconGlobe from 'virtual:icons/la/globe';
+  import IconEye from 'virtual:icons/la/eye';
+  import IconPencil from 'virtual:icons/la/pencil-alt';
   import { Tabs } from '@skeletonlabs/skeleton-svelte';
 
   let editableLists = $state([]);
@@ -17,6 +20,7 @@
   onMount(async () => {
     editableLists = await recallEditableLists();
     viewableLists = await recallViewableLists();
+    publicLists = await loadPublicLists();
   });
 </script>
 
@@ -33,15 +37,15 @@
     <Tabs bind:value={group}>
       {#snippet list()}
       <Tabs.Control value="mylists">
-        {#snippet lead()}(icon){/snippet}
+        {#snippet lead()}<IconPencil />{/snippet}
         My Lists
       </Tabs.Control>
       <Tabs.Control value="shared">
-        {#snippet lead()}(icon){/snippet}
+        {#snippet lead()}<IconEye />{/snippet}
         Shared with me
       </Tabs.Control>
       <Tabs.Control value="public">
-        {#snippet lead()}(icon){/snippet}
+        {#snippet lead()}<IconGlobe />{/snippet}
         Public Lists
       </Tabs.Control>
       {/snippet}
@@ -97,7 +101,7 @@
             {#each viewableLists as list}
               <div class="flex items-center justify-between p-3 rounded-lg border">
                 <div>
-                  <div class="font-medium"><a href={`/edit/${list.editId}`}>{list.name}</a></div>
+                  <div class="font-medium"><a href={`/list/${list.viewId}`}>{list.name}</a></div>
                   <span class="text-sm text-gray-400" title={list.createdOn}>Created: {formatDistanceToNow(list.createdOn, { addSuffix: true })}, </span>
                   <span class="text-sm text-gray-400" title={list.lastModifiedOn}>Modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
                 </div>
@@ -108,7 +112,7 @@
       </Tabs.Panel>
       <Tabs.Panel value="public">
         <h3 class="mb-4 italic">
-          Total {editableLists.length} public playlists. These are lists that people have listed on this server.
+          Total {publicLists.length} public playlists. These are lists that people have listed on this server.
         </h3>
 
         <div class="space-y-2 col-span-full">
@@ -116,7 +120,7 @@
             {#each publicLists as list}
               <div class="flex items-center justify-between p-3 rounded-lg border">
                 <div>
-                  <div class="font-medium"><a href={`/edit/${list.editId}`}>{list.name}</a></div>
+                  <div class="font-medium"><a href={`/list/${list.viewId}`}>{list.name}</a></div>
                   <span class="text-sm text-gray-400" title={list.createdOn}>Created: {formatDistanceToNow(list.createdOn, { addSuffix: true })}, </span>
                   <span class="text-sm text-gray-400" title={list.lastModifiedOn}>Modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
                 </div>
