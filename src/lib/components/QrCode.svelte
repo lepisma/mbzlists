@@ -1,19 +1,11 @@
 <script lang='ts'>
   import { onMount } from 'svelte';
   import QRCodeStyling from 'qr-code-styling';
+  import { blobToDataURL } from '$lib/utils';
 
   let { viewId } = $props();
 
   let largeQrHref = $state('');
-
-  function blobToDataURL(blob) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-    });
-  }
 
   function genQrCode(size: number) {
     return new QRCodeStyling({
