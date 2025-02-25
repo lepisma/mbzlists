@@ -22,10 +22,13 @@ if (!building) {
   db.exec(`
   CREATE TABLE IF NOT EXISTS lists (
     id TEXT PRIMARY KEY,
-    edit_id TEXT,
-    name TEXT,
-    created_on TEXT,
-    last_modified_on TEXT,
+    edit_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    created_on TEXT NOT NULL,
+    last_modified_on TEXT NOT NULL,
+    description TEXT,
+    cover_art BLOB,
+    is_public BOOLEAN DEFAULT FALSE,
     items TEXT DEFAULT '[]'
   )`);
 }
