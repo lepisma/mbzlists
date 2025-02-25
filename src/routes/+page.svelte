@@ -27,6 +27,10 @@
         {#snippet lead()}(icon){/snippet}
         My Lists
       </Tabs.Control>
+      <Tabs.Control value="shared">
+        {#snippet lead()}(icon){/snippet}
+        Shared with me
+      </Tabs.Control>
       <Tabs.Control value="public">
         {#snippet lead()}(icon){/snippet}
         Public Lists
@@ -35,8 +39,8 @@
 
       {#snippet content()}
       <Tabs.Panel value="mylists">
-        <h3 class="text-l font-italic mb-4">
-          Total {lists.length} playlists remembered on this machine.
+        <h3 class="mb-4 italic">
+          Total {lists.length} playlists remembered on this device. These are lists that you can edit.
         </h3>
 
         <div class="mb-5">
@@ -76,8 +80,11 @@
           {/if}
         </div>
       </Tabs.Panel>
+      <Tabs.Panel value="shared">
+        <p class="italic">No shared lists! When you open a list via a view-only link, they get saved here.</p>
+      </Tabs.Panel>
       <Tabs.Panel value="public">
-        <p class="italic">No public playlists!</p>
+        <p class="italic">No public playlists on this server!</p>
       </Tabs.Panel>
       {/snippet}
     </Tabs>
