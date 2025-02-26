@@ -19,6 +19,8 @@
   import IconSpotify from 'virtual:icons/logos/spotify';
   import { overrideItemIdKeyNameBeforeInitialisingDndZones, dndzone } from 'svelte-dnd-action';
   import { flip } from 'svelte/animate';
+  import { Switch } from '@skeletonlabs/skeleton-svelte';
+
   overrideItemIdKeyNameBeforeInitialisingDndZones('mbid');
 
   let list: EditableList = $state({
@@ -96,6 +98,11 @@
     await saveList(list);
   }
 
+  async function handlePublicToggle(e) {
+    list = {...list, isPublic: e.checked, lastModifiedOn: new Date()};
+    await saveList(list);
+  }
+
   onMount(async () => {
     list = await loadEditableList(list.editId);
 
@@ -125,6 +132,10 @@
       <button onclick={cloneList} class="btn btn-sm preset-filled-primary-500"><IconCopy />Make a Copy</button>
       <a href={`/api/list/${list.viewId}?type=xspf`} class="btn btn-sm preset-filled-primary-500"><IconDownload />XSPF</a>
       <a href={`/list/${list.viewId}`} class="btn btn-sm preset-filled-primary-500"><IconEye />View Link</a>
+    </div>
+
+    <div class="flex space-x-3">
+      <span>Make {#if list.isPublic } private {:else} public {/if} </span><Switch name="notifications" bind:checked={list.isPublic} onCheckedChange={handlePublicToggle}></Switch>
     </div>
   </div>
 
