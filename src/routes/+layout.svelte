@@ -5,8 +5,10 @@
   let { children } = $props();
 </script>
 
-<div class="max-w-2xl mx-auto rounded-lg shadow-lg p-6">
+<div class="max-w-2xl mx-auto rounded-lg shadow-lg">
   <Header />
-  {@render children()}
+  <div class="p-6">
+    {@render children()}
+  </div>
   <Footer />
 </div>
