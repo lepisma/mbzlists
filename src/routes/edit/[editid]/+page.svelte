@@ -15,6 +15,8 @@
   import IconEye from 'virtual:icons/la/eye';
   import IconPlay from 'virtual:icons/la/play';
   import IconCopy from 'virtual:icons/la/copy';
+  import IconLock from 'virtual:icons/la/lock';
+  import IconGlobe from 'virtual:icons/la/globe';
   import IconYoutubeIcon from 'virtual:icons/logos/youtube-icon';
   import IconSpotify from 'virtual:icons/logos/spotify';
   import { overrideItemIdKeyNameBeforeInitialisingDndZones, dndzone } from 'svelte-dnd-action';
@@ -135,7 +137,11 @@
     </div>
 
     <div class="flex space-x-3">
-      <span>Make {#if list.isPublic } private {:else} public {/if} </span><Switch name="notifications" bind:checked={list.isPublic} onCheckedChange={handlePublicToggle}></Switch>
+      <span>Make {#if list.isPublic } private {:else} public {/if} </span>
+        <Switch name="public" bind:checked={list.isPublic} onCheckedChange={handlePublicToggle}>
+          {#snippet inactiveChild()}<IconLock />{/snippet}
+          {#snippet activeChild()}<IconGlobe />{/snippet}
+        </Switch>
     </div>
   </div>
 
