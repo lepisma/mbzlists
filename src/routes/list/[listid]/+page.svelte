@@ -56,12 +56,8 @@
   <title>{list.name} | mbzlists</title>
 </svelte:head>
 
-<div class="max-w-2xl mx-auto rounded-lg shadow-lg p-6 grid grid-cols-3 gap-6">
+<div class="grid grid-cols-3 gap-6">
   <div class="col-span-2">
-    <h1 class="text-3xl font-bold text-gray-400 mb-4">
-      <a href="/">mbzlists</a>
-    </h1>
-
     <h2 class="text-4xl font-semibold mb-2">{list.name}</h2>
     <span class="text-sm text-gray-400" title={list.createdOn}>Created: {formatDistanceToNow(list.createdOn, { addSuffix: true })}, </span>
     <span class="text-sm text-gray-400" title={list.lastModifiedOn}>Modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>

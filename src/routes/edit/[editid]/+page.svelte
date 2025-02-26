@@ -108,12 +108,8 @@
   <title>{list.name} [editing] | mbzlists</title>
 </svelte:head>
 
-<div class="max-w-2xl mx-auto rounded-lg shadow-lg p-6 grid grid-cols-3 gap-6">
+<div class="grid grid-cols-3 gap-6">
   <div class="col-span-2">
-    <h1 class="text-3xl font-bold text-gray-400 mb-4">
-      <a href="/">mbzlists</a>
-    </h1>
-
     <input
       type="text"
       class="text-4xl font-semibold mb-2 bg-transparent border-0 border-b-2 border-gray-400 focus:ring-0 focus:border-primary-500 transition-colors pl-0"
