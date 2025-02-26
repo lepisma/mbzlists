@@ -106,7 +106,7 @@
   </Tabs.Panel>
   <Tabs.Panel value="public">
     <h3 class="mb-4 italic">
-      Total {publicLists.length} public playlists. These are lists that people have listed on this server.
+      Total {publicLists.length} public playlists. These are lists that people have made public on this server.
     </h3>
 
     <div class="space-y-2 col-span-full">
