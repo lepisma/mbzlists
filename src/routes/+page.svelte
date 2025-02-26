@@ -52,12 +52,12 @@
 
     <div class="mb-5">
       <div class="flex items-center ml-1">
-	<input type="search" class="w-full border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 input" bind:value={listName} placeholder="List Name" />
+	<input type="search" class="w-full border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 input" bind:value={listName} placeholder="Enter new list name" />
         <button onclick={async () => {
           let list = await createList(listName, []);
           goto(`/edit/${list.editId}`);
           }} class="btn preset-filled-primary-500 ml-2">
-          Add <IconPlusCircle />
+          Create <IconPlusCircle />
         </button>
       </div>
     </div>
