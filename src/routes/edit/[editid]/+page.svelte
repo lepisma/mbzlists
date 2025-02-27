@@ -8,6 +8,7 @@
   import { loadEditableList, createList, saveList } from '$lib/ops';
   import { getCoverArt, queryMB, getSpotifyId } from '$lib/mb';
   import type { EditableList, Song } from '$lib/types';
+  import { resolveYt } from '$lib/resolution';
   import { rememberItem } from '$lib/utils';
   import { formatDistanceToNow } from 'date-fns';
   import IconTrash from 'virtual:icons/la/trash';
@@ -67,6 +68,15 @@
 
     searchResults = await queryMB(query);
     showDropdown = searchResults.length > 0;
+  }
+
+  async function playTrackOnYt(song: Song) {
+    let ytURL = await resolveYt(song);
+    if (ytURL) {
+      window.open(ytURL, '_blank');
+    } else {
+      window.alert(`Not able to find the song ${song.title} on Youtube`);
+    }
   }
 
   async function playTrackOnSpotify(song: Song) {
@@ -175,8 +185,8 @@
               <div class="text-sm"><a class="anchor" href={`https://musicbrainz.org/artist/${item.artist.mbid}`}>{item.artist.title}</a></div>
               <div class="text-sm text-gray-500"><a class="anchor" href={`https://musicbrainz.org/release/${item.release.mbid}`}>{item.release.title} ({item.release.date})</a></div>
               <div class="mt-2 flex space-x-2">
-                <span><a class="anchor" href={`https://youtube.com/results?search_query=${encodeURIComponent(item.title + ' ' + item.artist.title)}`} target="_blank"><IconYoutubeIcon /></a></span>
-                <button onclick={async () => await playTrackOnSpotify(item)}><IconSpotify /></button>
+                <button title="Play on Youtube" onclick={async () => await playTrackOnYt(item) }><IconYoutubeIcon /></button>
+                <button title="Play on Spotify" onclick={async () => await playTrackOnSpotify(item)}><IconSpotify /></button>
               </div>
             </div>
           </div>

@@ -38,6 +38,7 @@
 		"lodash": "^4.17.21",
 		"qr-code-styling": "^1.9.1",
 		"uuid": "^11.0.5",
-		"xmlbuilder2": "^3.1.1"
+		"xmlbuilder2": "^3.1.1",
+		"yt-search": "^2.12.1"
 	}
 }
