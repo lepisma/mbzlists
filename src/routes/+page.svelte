@@ -4,11 +4,11 @@
   import { createList, deleteList, recallEditableLists, recallViewableLists, loadPublicLists } from '$lib/ops';
   import { formatDistanceToNow } from 'date-fns';
   import IconPlusCircle from 'virtual:icons/la/plus-circle';
-  import IconTrash from 'virtual:icons/la/trash';
   import IconGlobe from 'virtual:icons/la/globe';
   import IconEye from 'virtual:icons/la/eye';
   import IconPencil from 'virtual:icons/la/pencil-alt';
   import { Tabs } from '@skeletonlabs/skeleton-svelte';
+  import ListCard from '$lib/components/ListCard.svelte';
 
   let editableLists = $state([]);
   let viewableLists = $state([]);
@@ -65,22 +65,10 @@
     <div class="space-y-2 col-span-full">
       {#if editableLists.length > 0}
         {#each editableLists as list}
-          <div class="flex items-center justify-between p-3 rounded-lg border">
-            <div>
-              <div class="font-medium"><a href={`/edit/${list.editId}`}>{list.name}</a></div>
-              <span class="text-sm text-gray-400" title={list.createdOn}>Created: {formatDistanceToNow(list.createdOn, { addSuffix: true })}, </span>
-              <span class="text-sm text-gray-400" title={list.lastModifiedOn}>Modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
-            </div>
-            <button
-              type="button"
-              onclick={async () => {
-              await deleteList(list);
-              editableLists = await recallEditableLists();
-              }}
-              class="btn preset-filled-error-500">
-              <IconTrash />
-            </button>
-          </div>
+          <ListCard list={list} deleteCallback={async () => {
+            await deleteList(list);
+            editableLists = await recallEditableLists();
+            }} />
         {/each}
       {/if}
     </div>
@@ -93,13 +81,7 @@
     <div class="space-y-2 col-span-full">
       {#if viewableLists.length > 0}
         {#each viewableLists as list}
-          <div class="flex items-center justify-between p-3 rounded-lg border">
-            <div>
-              <div class="font-medium"><a href={`/list/${list.viewId}`}>{list.name}</a></div>
-              <span class="text-sm text-gray-400" title={list.createdOn}>Created: {formatDistanceToNow(list.createdOn, { addSuffix: true })}, </span>
-              <span class="text-sm text-gray-400" title={list.lastModifiedOn}>Modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
-            </div>
-          </div>
+          <ListCard list={list} />
         {/each}
       {/if}
     </div>
@@ -112,13 +94,7 @@
     <div class="space-y-2 col-span-full">
       {#if publicLists.length > 0}
         {#each publicLists as list}
-          <div class="flex items-center justify-between p-3 rounded-lg border">
-            <div>
-              <div class="font-medium"><a href={`/list/${list.viewId}`}>{list.name}</a></div>
-              <span class="text-sm text-gray-400" title={list.createdOn}>Created: {formatDistanceToNow(list.createdOn, { addSuffix: true })}, </span>
-              <span class="text-sm text-gray-400" title={list.lastModifiedOn}>Modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
-            </div>
-          </div>
+          <ListCard list={list} />
         {/each}
       {/if}
     </div>
