@@ -7,7 +7,7 @@
 
 <div class="max-w-2xl mx-auto rounded-lg shadow-lg">
   <Header />
-  <div class="p-6">
+  <div class="p-6 bg-white dark:bg-gray-700">
     {@render children()}
   </div>
   <Footer />

@@ -1,7 +1,7 @@
 <script>
 </script>
 
-<footer class="bg-white dark:bg-gray-700 p-6 rounded-b-lg">
+<footer class="p-6 rounded-b-lg">
   <blockquote class="blockquote mb-4">
     "Hello" - Adele
   </blockquote>
