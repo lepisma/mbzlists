@@ -22,10 +22,10 @@
   {#if dropdownState }
     <div class="absolute z-10 mt-2 w-40 origin-top-right divide-y divide-gray-100 dark:divide-gray-600 rounded-lg bg-white dark:bg-gray-800 dark:text-white ring-1 shadow-lg ring-black/5 dark:ring-white/10 focus:outline-hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
       <div class="py-1" role="none">
-        <a href="#" onclick={async () => await playListOnYt(list)} class="flex hover:bg-gray-100 dark:hover:bg-gray-700 items-center px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0"><IconYoutubeIcon class="mr-2" /> Play on Youtube</a>
+        <a href="#" onclick={async () => await playListOnYt(list)} class="flex hover:bg-primary-100 dark:hover:bg-primary-700 items-center px-4 py-2 text-sm transition-colors duration-150" role="menuitem" tabindex="-1" id="menu-item-0"><IconYoutubeIcon class="mr-2" /> Play on Youtube</a>
       </div>
       <div class="py-1" role="none">
-        <a href={`/api/list/${list.viewId}?type=xspf`} class="flex hover:bg-gray-100 dark:hover:bg-gray-700 items-center px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2"><IconDownload class="mr-2" /> Download as XSPF</a>
+        <a href={`/api/list/${list.viewId}?type=xspf`} class="flex hover:bg-primary-100 dark:hover:bg-primary-700 items-center px-4 py-2 text-sm transition-colors duration-150" role="menuitem" tabindex="-1" id="menu-item-2"><IconDownload class="mr-2" /> Download as XSPF</a>
       </div>
     </div>
   {/if}
