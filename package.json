@@ -36,6 +36,7 @@
 		"better-sqlite3": "^11.8.1",
 		"date-fns": "^4.1.0",
 		"lodash": "^4.17.21",
+		"p-memoize": "^7.1.1",
 		"qr-code-styling": "^1.9.1",
 		"uuid": "^11.0.5",
 		"xmlbuilder2": "^3.1.1",
