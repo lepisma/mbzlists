@@ -8,7 +8,7 @@
   import { loadEditableList, createList, saveList } from '$lib/ops';
   import { getCoverArt, queryMB } from '$lib/mb';
   import type { EditableList, Song } from '$lib/types';
-  import { resolveYt, resolveSpotify } from '$lib/resolution';
+  import type { playTrackOnSpotify, playTrackOnYt } from '$lib/playback';
   import { rememberItem } from '$lib/utils';
   import { formatDistanceToNow } from 'date-fns';
   import IconTrash from 'virtual:icons/la/trash';
@@ -70,24 +70,6 @@
 
     searchResults = await queryMB(query);
     showDropdown = searchResults.length > 0;
-  }
-
-  async function playTrackOnYt(song: Song) {
-    let ytURL = await resolveYt(song);
-    if (ytURL) {
-      window.open(ytURL, '_blank');
-    } else {
-      window.alert(`Not able to find the song ${song.title} on Youtube`);
-    }
-  }
-
-  async function playTrackOnSpotify(song: Song) {
-    let spURL = await resolveSpotify(song);
-    if (spURL) {
-      window.open(spURL, '_blank');
-    } else {
-      window.alert(`Not able to find the song ${song.title} on Spotify`);
-    }
   }
 
   const handleInput = debounce((e) => {

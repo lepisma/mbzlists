@@ -7,8 +7,8 @@
   import { loadList, createList,  } from '$lib/ops';
   import { getCoverArt } from '$lib/mb';
   import { rememberItem } from '$lib/utils';
-  import type { List, Song } from '$lib/types';
-  import { resolveYt, resolveSpotify } from '$lib/resolution';
+  import type { List } from '$lib/types';
+  import type { playTrackOnSpotify, playTrackOnYt } from '$lib/playback';
   import { goto } from '$app/navigation';
   import { formatDistanceToNow } from 'date-fns';
   import IconDownload from 'virtual:icons/la/download';
@@ -16,8 +16,6 @@
   import IconCopy from 'virtual:icons/la/copy';
   import IconYoutubeIcon from 'virtual:icons/logos/youtube-icon';
   import IconSpotify from 'virtual:icons/logos/spotify';
-  import IconYoutube from 'virtual:icons/logos/youtube';
-  import IconSpotifyIcon from 'virtual:icons/logos/spotify-icon';
 
   let list: List = $state({
     viewId: $page.params.listid,
@@ -33,24 +31,6 @@
   async function cloneList() {
     let clonedList = await createList(`Copy of ${list.name}`, list.items);
     goto(`/edit/${clonedList.editId}`);
-  }
-
-  async function playTrackOnYt(song: Song) {
-    let ytURL = await resolveYt(song);
-    if (ytURL) {
-      window.open(ytURL, '_blank');
-    } else {
-      window.alert(`Not able to find the song ${song.title} on Youtube`);
-    }
-  }
-
-  async function playTrackOnSpotify(song: Song) {
-    let spURL = await resolveSpotify(song);
-    if (spURL) {
-      window.open(spURL, '_blank');
-    } else {
-      window.alert(`Not able to find the song ${song.title} on Spotify`);
-    }
   }
 
   onMount(async () => {
