@@ -5,6 +5,7 @@
   import SongDuration from '$lib/components/SongDuration.svelte';
   import PlayListDuration from '$lib/components/PlayListDuration.svelte';
   import PlayListPlayButton from '$lib/components/PlayListPlayButton.svelte';
+  import ShareButton from '$lib/components/ShareButton.svelte';
   import { loadList, createList,  } from '$lib/ops';
   import { getCoverArt } from '$lib/mb';
   import { rememberItem } from '$lib/utils';
@@ -50,6 +51,7 @@
 
     <div class="flex space-x-4 mb-4">
       <PlayListPlayButton list={list} />
+      <ShareButton list={list} />
       <button onclick={cloneList} class="btn btn-sm preset-filled-primary-500"><IconCopy />Make a Copy</button>
     </div>
   </div>

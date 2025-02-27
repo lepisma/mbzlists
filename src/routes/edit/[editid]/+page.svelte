@@ -6,6 +6,7 @@
   import SongDuration from '$lib/components/SongDuration.svelte';
   import PlayListDuration from '$lib/components/PlayListDuration.svelte';
   import PlayListPlayButton from '$lib/components/PlayListPlayButton.svelte';
+  import ShareButton from '$lib/components/ShareButton.svelte';
   import { loadEditableList, createList, saveList } from '$lib/ops';
   import { getCoverArt, queryMB } from '$lib/mb';
   import type { EditableList } from '$lib/types';
@@ -13,7 +14,6 @@
   import { rememberItem } from '$lib/utils';
   import { formatDistanceToNow } from 'date-fns';
   import IconTrash from 'virtual:icons/la/trash';
-  import IconEye from 'virtual:icons/la/eye';
   import IconCopy from 'virtual:icons/la/copy';
   import IconLock from 'virtual:icons/la/lock';
   import IconGlobe from 'virtual:icons/la/globe';
@@ -116,8 +116,8 @@
 
     <div class="flex space-x-4 mb-4">
       <PlayListPlayButton list={list} />
+      <ShareButton list={list} isEdit={true} />
       <button onclick={cloneList} class="btn btn-sm preset-filled-primary-500"><IconCopy />Make a Copy</button>
-      <a href={`/list/${list.viewId}`} class="btn btn-sm preset-filled-primary-500"><IconEye />View Link</a>
     </div>
 
     <div class="flex space-x-3">
