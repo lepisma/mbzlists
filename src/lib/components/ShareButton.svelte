@@ -1,38 +1,95 @@
 <script lang='ts'>
+  import { getContext } from 'svelte';
   import IconDownload from 'virtual:icons/la/download';
-  import IconEye from 'virtual:icons/la/eye';
-  import IconPencil from 'virtual:icons/la/pencil-alt';
+  import IconCopy from 'virtual:icons/la/copy';
   import IconShare from 'virtual:icons/la/share';
-  import { OutClick } from 'svelte-outclick';
+  import IconLock from 'virtual:icons/la/lock';
+  import IconGlobe from 'virtual:icons/la/globe';
+  import { Modal, Switch } from '@skeletonlabs/skeleton-svelte';
+  import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
+  import QrCode from './QrCode.svelte';
+  import { saveList } from '$lib/ops';
+
+  let toast: ToastContext = $state(getContext('toast'));
+  let openState = $state(false);
+
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text);
+    toast.create({
+      title: 'Copied',
+      description: 'The link was copied to the clipboard!',
+      type: 'success',
+      groupZIndex: 1000
+    });
+  }
 
   let { list, isEdit = false } = $props();
-  let dropdownState: boolean = $state(false);
+
+  async function handlePublicToggle(e) {
+    list = {...list, isPublic: e.checked, lastModifiedOn: new Date()};
+    await saveList(list);
+  }
+
 </script>
 
-<div class="relative inline-block text-left">
-  <div>
-    <button type="button" onclick={() => {dropdownState = !dropdownState}} class="btn btn-sm preset-filled-primary-500 inline-flex w-full justify-center gap-x-1.5 px-3 py-2" id="menu-button" aria-expanded="true" aria-haspopup="true">
-      <IconShare />
-      Share
-      <svg class="-mr-1 size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-        <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-      </svg>
-    </button>
-  </div>
+<Modal bind:open={openState}
+  triggerBase="btn btn-sm preset-filled-primary-500 inline-flex w-full justify-center gap-x-1.5 px-3 py-2"
+  contentBase="card w-full bg-surface-100 p-6 space-y-4 shadow-2xl max-w-screen-sm rounded-lg">
 
-  {#if dropdownState }
-    <OutClick onOutClick={() => dropdownState = false}>
-      <div class="absolute z-10 mt-2 w-40 origin-top-right divide-y divide-gray-100 dark:divide-gray-600 rounded-lg bg-white dark:bg-gray-800 dark:text-white ring-1 shadow-lg ring-black/5 dark:ring-white/10 focus:outline-hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-        <div class="py-1" role="none">
-          {#if isEdit }
-              <a href={`/edit/${list.editId}`} class="flex hover:bg-primary-100 dark:hover:bg-primary-700 items-center px-4 py-2 text-sm transition-colors duration-150" role="menuitem" tabindex="-1" id="menu-item-2"><IconPencil class="mr-2" /> Edit Link</a>
+  {#snippet trigger()}<IconShare /> Share{/snippet}
+  {#snippet content()}
+    <header class="flex justify-between items-center pb-2">
+      <h5 class="h5">Share Playlist</h5>
+    </header>
+
+    <article class="space-y-4">
+      <div class="grid grid-cols-3">
+        <p class="text-gray-600 text-lg col-span-full">View-only Link</p>
+        <div class="col-span-2">
+          <div class="mt-2 mb-2">This allows people to only see and play the list. You can also share this link via the QR Code.</div>
+          <div class="flex items-center gap-2 mt-4 mb-4">
+            <input class="input w-full p-2" readonly value={`${'st'}/list/${list.viewId}`} />
+            <button class="btn p-2 preset-tonal" onclick={() => copyToClipboard(`${'st'}/list/${list.viewId}`)}>
+              <IconCopy />
+            </button>
+          </div>
+          {#if list.isPublic}
+            <div class="text-primary-800">This playlist is publicly listed on this server and can be <i>viewed</i> by anyone.</div>
+          {:else}
+            <div class="text-primary-800">This list has not been publicly listed by the author(s). Only people with view or edit links can access this playlist.</div>
           {/if}
-          <a href={`/list/${list.viewId}`} class="flex hover:bg-primary-100 dark:hover:bg-primary-700 items-center px-4 py-2 text-sm transition-colors duration-150" role="menuitem" tabindex="-1" id="menu-item-2"><IconEye class="mr-2" /> View-only Link</a>
         </div>
-        <div class="py-1" role="none">
-          <a href={`/api/list/${list.viewId}?type=xspf`} class="flex hover:bg-primary-100 dark:hover:bg-primary-700 items-center px-4 py-2 text-sm transition-colors duration-150" role="menuitem" tabindex="-1" id="menu-item-2"><IconDownload class="mr-2" /> Download as XSPF</a>
+        <div class="col-span-1 flex justify-end">
+          <QrCode viewId={list.viewId} />
         </div>
       </div>
-    </OutClick>
-  {/if}
-</div>
+
+      {#if isEdit}
+        <div class="col-span-full">
+          <p class="text-gray-600 text-lg mt-7">Edit Link</p>
+          <div class="mt-2 mb-2">This allows editing everything about the playlist. Share with caution.</div>
+          <div class="flex items-center gap-2 mt-4 mb-2">
+            <input class="input w-full p-2" readonly value={`${'st'}/edit/${list.editId}`} />
+            <button class="btn p-2 preset-tonal" onclick={() => copyToClipboard(`${'st'}/edit/${list.editId}`)}>
+              <IconCopy />
+            </button>
+          </div>
+          <div class="flex items-center mt-4">
+            <Switch name="public" bind:checked={list.isPublic} onCheckedChange={handlePublicToggle}>
+              {#snippet inactiveChild()}<IconLock />{/snippet}
+              {#snippet activeChild()}<IconGlobe />{/snippet}
+            </Switch>
+            <span class="pl-2">Make {#if list.isPublic} Private {:else} Public {/if} </span>
+          </div>
+        </div>
+      {/if}
+    </article>
+
+    <footer class="flex justify-end gap-4 pt-2">
+      <a href={`/api/list/${list.viewId}?type=xspf`} class="btn preset-tonal">
+        <IconDownload class="mr-2" /> Download as XSPF
+      </a>
+      <button type="button" class="btn preset-tonal" onclick={() => openState = false}>Done</button>
+    </footer>
+  {/snippet}
+</Modal>
