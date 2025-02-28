@@ -52,6 +52,15 @@
               <IconCopy />
             </button>
           </div>
+          {#if isEdit}
+            <div class="flex items-center mt-4 mb-4">
+              <Switch name="public" bind:checked={list.isPublic} onCheckedChange={handlePublicToggle}>
+                {#snippet inactiveChild()}<IconLock />{/snippet}
+                {#snippet activeChild()}<IconGlobe />{/snippet}
+              </Switch>
+              <span class="pl-2">Make {#if list.isPublic} Private {:else} Public {/if} </span>
+            </div>
+          {/if}
           {#if list.isPublic}
             <div class="text-primary-800">This playlist is publicly listed on this server and can be <i>viewed</i> by anyone.</div>
           {:else}
@@ -73,20 +82,13 @@
               <IconCopy />
             </button>
           </div>
-          <div class="flex items-center mt-4">
-            <Switch name="public" bind:checked={list.isPublic} onCheckedChange={handlePublicToggle}>
-              {#snippet inactiveChild()}<IconLock />{/snippet}
-              {#snippet activeChild()}<IconGlobe />{/snippet}
-            </Switch>
-            <span class="pl-2">Make {#if list.isPublic} Private {:else} Public {/if} </span>
-          </div>
         </div>
       {/if}
     </article>
 
     <footer class="flex justify-end gap-4 pt-2">
       <a href={`/api/list/${list.viewId}?type=xspf`} class="btn preset-tonal">
-        <IconDownload class="mr-2" /> Download as XSPF
+        <IconDownload class="mr-2" /> Download list as XSPF
       </a>
       <button type="button" class="btn preset-tonal" onclick={() => openState = false}>Done</button>
     </footer>
