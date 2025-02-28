@@ -18,7 +18,7 @@
     <Modal
       bind:open={aboutModalState}
       triggerBase="anchor"
-      contentBase="card p-4 space-y-4 shadow-xl max-w-screen-sm"
+      contentBase="card p-4 bg-surface-100 space-y-4 shadow-xl max-w-screen-sm rounded-lg"
       backdropClasses="backdrop-blur-sm"
       >
       {#snippet trigger()}About{/snippet}
@@ -41,7 +41,7 @@
     <Modal
       bind:open={dataModalState}
       triggerBase="anchor"
-      contentBase="card p-4 space-y-4 shadow-xl max-w-screen-sm"
+      contentBase="card p-4 bg-surface-100 space-y-4 shadow-xl max-w-screen-sm rounded-lg"
       backdropClasses="backdrop-blur-sm"
       >
       {#snippet trigger()}Data Policy{/snippet}
