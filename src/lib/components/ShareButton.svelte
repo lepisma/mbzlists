@@ -19,7 +19,6 @@
       title: 'Copied',
       description: 'The link was copied to the clipboard!',
       type: 'success',
-      groupZIndex: 1000
     });
   }
 
