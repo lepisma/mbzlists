@@ -38,8 +38,8 @@ export async function loadPublicLists(): Promise<List[]> {
   });
 }
 
-async function loadListMetadata(viewId: string): Promise<ListMetadata> {
-  let res = await fetch(`/api/metadata/list/${viewId}`);
+async function loadMetadata(id: string, isEdit: boolean): Promise<ListMetadata | EditableListMetadata> {
+  let res = await fetch(`/api/metadata/${isEdit ? 'edit' : 'list'}/${id}`);
 
   if (res.ok) {
     let data = await res.json();
@@ -53,42 +53,19 @@ async function loadListMetadata(viewId: string): Promise<ListMetadata> {
   }
 }
 
-async function loadEditableListMetadata(editId: string): Promise<EditableListMetadata> {
-  let res = await fetch(`/api/metadata/edit/${editId}`);
-
-  if (res.ok) {
-    let data = await res.json();
-
-    return {
-      ...data,
-      createdOn: new Date(data.createdOn),
-      lastModifiedOn: new Date(data.lastModifiedOn),
-    };
-  } else {
-    return Promise.reject(new Error(`API error: ${res}`));
-  }
-}
-
-// Load list with edit-ids saved locally and fetch metadata to show
-export async function recallEditableLists(): Promise<EditableListMetadata[]> {
+export async function recallLists(isEdit: boolean): Promise<EditableListMetadata[] | ListMetadata[]> {
   if (browser) {
-    let editIds = recallItems('editableItems').map(ids => ids.editId);
-    let results = await Promise.allSettled(editIds.map(editId => loadEditableListMetadata(editId)));
+    let ids: string[] = [];
 
-    return results.filter(res => res.status === 'fulfilled').map(it => it.value);
-  }
+    if (isEdit) {
+      ids = recallItems('editableItems').map(it => it.editId);
+    } else {
+      ids = recallItems('viewableItems');
+      let viewIdsFromEdits = recallItems('editableItems').map(it => it.viewId);
+      ids = ids.filter(id => !viewIdsFromEdits.includes(id));
+    }
 
-  return Promise.resolve([]);
-}
-
-// Load list with view-ids saved locally (removing items already saved as editable) and fetch metadata to show
-export async function recallViewableLists(): Promise<ListMetadata[]> {
-  if (browser) {
-    let viewIds = recallItems('viewableItems');
-    let viewIdsFromEdits = recallItems('editableItems').map(ids => ids.viewId);
-    viewIds = viewIds.filter(id => !viewIdsFromEdits.includes(id));
-    let results = await Promise.allSettled(viewIds.map(viewId => loadListMetadata(viewId)));
-
+    let results = await Promise.allSettled(ids.map(id => loadMetadata(id, isEdit)));
     return results.filter(res => res.status === 'fulfilled').map(it => it.value);
   }
 

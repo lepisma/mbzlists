@@ -1,7 +1,7 @@
 <script lang='ts'>
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
-  import { createList, deleteList, recallEditableLists, recallViewableLists, loadPublicLists } from '$lib/ops';
+  import { createList, deleteList, recallLists, loadPublicLists } from '$lib/ops';
   import { formatDistanceToNow } from 'date-fns';
   import IconPlusCircle from 'virtual:icons/la/plus-circle';
   import IconGlobe from 'virtual:icons/la/globe';
@@ -18,8 +18,8 @@
   let group = $state('mylists');
 
   onMount(async () => {
-    editableLists = await recallEditableLists();
-    viewableLists = await recallViewableLists();
+    editableLists = await recallLists(true);
+    viewableLists = await recallLists(false);
     publicLists = await loadPublicLists();
   });
 </script>
