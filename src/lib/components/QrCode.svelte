@@ -7,11 +7,14 @@
 
   let largeQrHref = $state('');
 
+
   function genQrCode(size: number) {
+    let url = new URL(document.URL);
+
     return new QRCodeStyling({
       width: size,
       height: size,
-      data: `https://mbzlists.com/list/${viewId}`,
+      data: `${url.origin}/list/${viewId}`,
       image: '/mb-logo.png',
       dotsOptions: {
         color: '#bb4590',
