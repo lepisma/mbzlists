@@ -48,8 +48,8 @@
         <div class="col-span-2">
           <div class="mt-2 mb-2">This allows people to only see and play the list. You can also share this link via the QR Code.</div>
           <div class="flex items-center gap-2 mt-4 mb-4">
-            <input class="input w-full p-2" readonly value={`${'st'}/list/${list.viewId}`} />
-            <button class="btn p-2 preset-tonal" onclick={() => copyToClipboard(`${'st'}/list/${list.viewId}`)}>
+            <input class="input w-full p-2" readonly value={`${(new URL(document.URL)).origin}/list/${list.viewId}`} />
+            <button class="btn p-2 preset-tonal" onclick={() => copyToClipboard(`${(new URL(document.URL)).origin}/list/${list.viewId}`)}>
               <IconCopy />
             </button>
           </div>
@@ -69,8 +69,8 @@
           <p class="text-gray-600 text-lg mt-7">Edit Link</p>
           <div class="mt-2 mb-2">This allows editing everything about the playlist. Share with caution.</div>
           <div class="flex items-center gap-2 mt-4 mb-2">
-            <input class="input w-full p-2" readonly value={`${'st'}/edit/${list.editId}`} />
-            <button class="btn p-2 preset-tonal" onclick={() => copyToClipboard(`${'st'}/edit/${list.editId}`)}>
+            <input class="input w-full p-2" readonly value={`${(new URL(document.URL)).origin}/edit/${list.editId}`} />
+            <button class="btn p-2 preset-tonal" onclick={() => copyToClipboard(`${(new URL(document.URL)).origin}/edit/${list.editId}`)}>
               <IconCopy />
             </button>
           </div>
