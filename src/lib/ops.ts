@@ -40,31 +40,42 @@ export async function loadPublicLists(): Promise<List[]> {
 
 async function loadListMetadata(viewId: string): Promise<ListMetadata> {
   let res = await fetch(`/api/metadata/list/${viewId}`);
-  let data = await res.json();
 
-  return {
-    ...data,
-    createdOn: new Date(data.createdOn),
-    lastModifiedOn: new Date(data.lastModifiedOn),
-  };
+  if (res.ok) {
+    let data = await res.json();
+    return {
+      ...data,
+      createdOn: new Date(data.createdOn),
+      lastModifiedOn: new Date(data.lastModifiedOn),
+    };
+  } else {
+    return Promise.reject(new Error(`API error: ${res}`));
+  }
 }
 
 async function loadEditableListMetadata(editId: string): Promise<EditableListMetadata> {
   let res = await fetch(`/api/metadata/edit/${editId}`);
-  let data = await res.json();
 
-  return {
-    ...data,
-    createdOn: new Date(data.createdOn),
-    lastModifiedOn: new Date(data.lastModifiedOn),
-  };
+  if (res.ok) {
+    let data = await res.json();
+
+    return {
+      ...data,
+      createdOn: new Date(data.createdOn),
+      lastModifiedOn: new Date(data.lastModifiedOn),
+    };
+  } else {
+    return Promise.reject(new Error(`API error: ${res}`));
+  }
 }
 
 // Load list with edit-ids saved locally and fetch metadata to show
 export async function recallEditableLists(): Promise<EditableListMetadata[]> {
   if (browser) {
     let editIds = recallItems('editableItems').map(ids => ids.editId);
-    return Promise.all(editIds.map(editId => loadEditableListMetadata(editId)));
+    let results = await Promise.allSettled(editIds.map(editId => loadEditableListMetadata(editId)));
+
+    return results.filter(res => res.status === 'fulfilled').map(it => it.value);
   }
 
   return Promise.resolve([]);
@@ -76,8 +87,9 @@ export async function recallViewableLists(): Promise<ListMetadata[]> {
     let viewIds = recallItems('viewableItems');
     let viewIdsFromEdits = recallItems('editableItems').map(ids => ids.viewId);
     viewIds = viewIds.filter(id => !viewIdsFromEdits.includes(id));
+    let results = await Promise.allSettled(viewIds.map(viewId => loadListMetadata(viewId)));
 
-    return Promise.all(viewIds.map(viewId => loadListMetadata(viewId)));
+    return results.filter(res => res.status === 'fulfilled').map(it => it.value);
   }
 
   return Promise.resolve([]);
