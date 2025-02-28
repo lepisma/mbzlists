@@ -33,8 +33,7 @@
 
 <Modal bind:open={openState}
   triggerBase="btn btn-sm preset-filled-primary-500 inline-flex w-full justify-center gap-x-1.5 px-3 py-2"
-  contentBase="card w-full bg-surface-100 p-6 space-y-4 shadow-2xl max-w-screen-sm rounded-lg">
-
+  contentBase="card w-full bg-surface-100 dark:bg-surface-900 p-6 space-y-4 shadow-2xl max-w-screen-sm rounded-lg">
   {#snippet trigger()}<IconShare /> Share{/snippet}
   {#snippet content()}
     <header class="flex justify-between items-center pb-2">
@@ -43,7 +42,7 @@
 
     <article class="space-y-4">
       <div class="grid grid-cols-3">
-        <p class="text-gray-600 text-lg col-span-full">View-only Link</p>
+        <p class="text-gray-600 dark:text-gray-300 text-lg col-span-full">View-only Link</p>
         <div class="col-span-2">
           <div class="mt-2 mb-2">This allows people to only see and play the list. You can also share this link via the QR Code.</div>
           <div class="flex items-center gap-2 mt-4 mb-4">
@@ -62,9 +61,9 @@
             </div>
           {/if}
           {#if list.isPublic}
-            <div class="text-primary-800">This playlist is publicly listed on this server and can be <i>viewed</i> by anyone.</div>
+            <div class="text-primary-800 dark:text-primary-300">This playlist is publicly listed on this server and can be <i>viewed</i> by anyone.</div>
           {:else}
-            <div class="text-primary-800">This list has not been publicly listed by the author(s). Only people with view or edit links can access this playlist.</div>
+            <div class="text-primary-800 dark:text-primary-300">This list has not been publicly listed by the author(s). Only people with view or edit links can access this playlist.</div>
           {/if}
         </div>
         <div class="col-span-1 flex justify-end">
@@ -74,7 +73,7 @@
 
       {#if isEdit}
         <div class="col-span-full">
-          <p class="text-gray-600 text-lg mt-7">Edit Link</p>
+          <p class="text-gray-600 dark:text-gray-300 text-lg mt-7">Edit Link</p>
           <div class="mt-2 mb-2">This allows editing everything about the playlist. Share with caution.</div>
           <div class="flex items-center gap-2 mt-4 mb-2">
             <input class="input w-full p-2" readonly value={`${(new URL(document.URL)).origin}/edit/${list.editId}`} />
