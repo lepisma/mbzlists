@@ -1,8 +1,7 @@
 <script lang='ts'>
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
-  import { createList, deleteList, recallLists, loadPublicLists } from '$lib/ops';
-  import { formatDistanceToNow } from 'date-fns';
+  import { createList, forgetList, recallLists, loadPublicLists } from '$lib/ops';
   import IconPlusCircle from 'virtual:icons/la/plus-circle';
   import IconGlobe from 'virtual:icons/la/globe';
   import IconEye from 'virtual:icons/la/eye';
@@ -65,9 +64,9 @@
     <div class="space-y-2 col-span-full">
       {#if editableLists.length > 0}
         {#each editableLists as list}
-          <ListCard list={list} deleteCallback={async () => {
-            await deleteList(list);
-            editableLists = await recallEditableLists();
+          <ListCard list={list} forgetCallback={async () => {
+            forgetList(list);
+            editableLists = await recallLists(true);
             }} />
         {/each}
       {/if}

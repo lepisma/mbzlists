@@ -114,6 +114,15 @@ export async function saveList(list: EditableList) {
   });
 }
 
+// Remove item from the device memory
+export function forgetList(list: List | EditableList) {
+  if (list.editId) {
+    forgetItem('editableItems', { editId: list.editId, viewId: list.viewId }, ids => ids.editId);
+  } else {
+    forgetItem('viewableItems', list.viewId, id => id);
+  }
+}
+
 export async function deleteList(list: EditableList) {
   await fetch(`/api/edit/${list.editId}`, {
     method: 'DELETE'
