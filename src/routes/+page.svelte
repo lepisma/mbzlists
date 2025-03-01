@@ -80,7 +80,10 @@
     <div class="space-y-2 col-span-full">
       {#if viewableLists.length > 0}
         {#each viewableLists as list}
-          <ListCard list={list} />
+          <ListCard list={list} forgetCallback={async () => {
+            forgetList(list);
+            viewableLists = await recallLists(false);
+            }}/>
         {/each}
       {/if}
     </div>
