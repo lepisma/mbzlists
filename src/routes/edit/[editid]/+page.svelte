@@ -5,15 +5,15 @@
   import SongDuration from '$lib/components/SongDuration.svelte';
   import PlayListDuration from '$lib/components/PlayListDuration.svelte';
   import PlayListPlayButton from '$lib/components/PlayListPlayButton.svelte';
+  import PlayListMenuButton from '$lib/components/PlayListMenuButton.svelte';
   import ShareButton from '$lib/components/ShareButton.svelte';
-  import { loadEditableList, createList, saveList } from '$lib/ops';
+  import { loadEditableList, saveList } from '$lib/ops';
   import { getCoverArt, queryMB } from '$lib/mb';
   import type { EditableList } from '$lib/types';
   import { playTrackOnSpotify, playTrackOnYt } from '$lib/playback';
   import { rememberItem } from '$lib/utils';
   import { formatDistanceToNow } from 'date-fns';
   import IconTrash from 'virtual:icons/la/trash';
-  import IconCopy from 'virtual:icons/la/copy';
   import IconYoutubeIcon from 'virtual:icons/logos/youtube-icon';
   import IconSpotify from 'virtual:icons/logos/spotify';
   import IconDrag from 'virtual:icons/clarity/drag-handle-line';
@@ -52,11 +52,6 @@
     list.items = list.items.filter(it => it.mbid !== mbid);
     list = {...list, lastModifiedOn: new Date()};
     await saveList(list);
-  }
-
-  async function cloneList() {
-    let clonedList = await createList(`Copy of ${list.name}`, list.items);
-    window.open(`/edit/${clonedList.editId}`, '_blank');
   }
 
   async function searchSongs(query) {
@@ -133,7 +128,7 @@
   <div class="flex space-x-2">
     <PlayListPlayButton list={list} />
     <ShareButton list={list} isEdit={true} />
-    <button onclick={cloneList} class="btn btn-sm preset-filled-primary-500"><IconCopy />Make a Copy</button>
+    <PlayListMenuButton list={list} isEdit={true} />
   </div>
 </div>
 
