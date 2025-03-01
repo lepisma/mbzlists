@@ -31,6 +31,7 @@
      createdOn: new Date(),
      lastModifiedOn: new Date(),
      isPublic: false,
+     description: '',
   });
 
   let toast: ToastContext = $state(getContext('toast'));
@@ -78,6 +79,11 @@
     await saveList(list);
   }, 500);
 
+  const handleDescriptionEdits = debounce(async () => {
+    list = {...list, lastModifiedOn: new Date()};
+    await saveList(list);
+  }, 500);
+
   async function handleSort(e) {
     list.items = e.detail.items;
     list = {...list, lastModifiedOn: new Date()};
@@ -109,7 +115,19 @@
     <span title={list.createdOn}>Created: {formatDistanceToNow(list.createdOn, { addSuffix: true })}, </span>
     <span title={list.lastModifiedOn}>modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
   </div>
-  <div class="mt-2 font-italic mb-4">Total {list.items.length} songs, duration: <PlayListDuration list={list} /></div>
+
+  <div class="max-w-sm mt-2">
+    <textarea
+      class="textarea rounded-container rounded-md"
+      rows="2"
+      placeholder="Add description for your list here"
+      bind:value={list.description}
+      oninput={handleDescriptionEdits}
+      >
+    </textarea>
+  </div>
+
+  <div class="mt-2 italic mb-4">Total {list.items.length} songs, duration: <PlayListDuration list={list} /></div>
 
   <div class="flex space-x-2">
     <PlayListPlayButton list={list} />
