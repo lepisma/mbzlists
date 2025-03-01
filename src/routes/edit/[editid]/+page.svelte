@@ -16,6 +16,7 @@
   import IconCopy from 'virtual:icons/la/copy';
   import IconYoutubeIcon from 'virtual:icons/logos/youtube-icon';
   import IconSpotify from 'virtual:icons/logos/spotify';
+  import IconDrag from 'virtual:icons/clarity/drag-handle-line';
   import { overrideItemIdKeyNameBeforeInitialisingDndZones, dndzone } from 'svelte-dnd-action';
   import { flip } from 'svelte/animate';
   import { OutClick } from 'svelte-outclick';
@@ -142,26 +143,29 @@
   {:else}
     <section use:dndzone={{ items: list.items, flipDurationMs: 200 }} onconsider={handleSort} onfinalize={handleSort}>
       {#each list.items as item(item.mbid)}
-        <div class="flex items-center justify-between mt-2 p-3 rounded-lg border shadow-md" animate:flip={{duration: 200}}>
-          <div class="flex">
-            <div>
-              {#await getCoverArt(item.release.mbid)}
-                <img src="" alt="" class="w-16 h-16 mr-2 object-cover placeholder animate-pulse rounded-md" />
-              {:then value}
-                <img src={value || "https://placehold.co/100?text=NA"} alt="" class="w-16 h-16 mr-2 object-cover rounded-md" />
-              {:catch error}
-                <img src="https://placehold.co/100?text=NA" alt="" class="w-16 h-16 mr-2 object-cover placeholder rounded-md" />
-              {/await}
-            </div>
-            <div>
-              <div class="font-medium"><a class="anchor" href={`https://musicbrainz.org/recording/${item.mbid}`}>{item.title}</a>
-                <span class="text-sm text-gray-500"><SongDuration song={item} /></span>
+        <div class="flex items-center justify-between mt-2 p-3 pl-1 rounded-lg border shadow-md" animate:flip={{duration: 200}}>
+          <div class="flex items-center">
+            <div class="mr-1"><IconDrag width="36" height="36" style="color: gray" /></div>
+            <div class="flex">
+              <div>
+                {#await getCoverArt(item.release.mbid)}
+                  <img src="" alt="" class="w-16 h-16 mr-2 object-cover placeholder animate-pulse rounded-md" />
+                {:then value}
+                  <img src={value || "https://placehold.co/100?text=NA"} alt="" class="w-16 h-16 mr-2 object-cover rounded-md" />
+                {:catch error}
+                  <img src="https://placehold.co/100?text=NA" alt="" class="w-16 h-16 mr-2 object-cover placeholder rounded-md" />
+                {/await}
               </div>
-              <div class="text-sm"><a class="anchor" href={`https://musicbrainz.org/artist/${item.artist.mbid}`}>{item.artist.title}</a></div>
-              <div class="text-sm text-gray-500"><a class="anchor" href={`https://musicbrainz.org/release/${item.release.mbid}`}>{item.release.title} ({item.release.date})</a></div>
-              <div class="mt-2 flex space-x-2">
-                <button title="Play on Youtube" onclick={async () => await playTrackOnYt(item, toast) }><IconYoutubeIcon /></button>
-                <button title="Play on Spotify" onclick={async () => await playTrackOnSpotify(item, toast)}><IconSpotify /></button>
+              <div>
+                <div class="font-medium"><a class="anchor" href={`https://musicbrainz.org/recording/${item.mbid}`}>{item.title}</a>
+                  <span class="text-sm text-gray-500"><SongDuration song={item} /></span>
+                </div>
+                <div class="text-sm"><a class="anchor" href={`https://musicbrainz.org/artist/${item.artist.mbid}`}>{item.artist.title}</a></div>
+                <div class="text-sm text-gray-500"><a class="anchor" href={`https://musicbrainz.org/release/${item.release.mbid}`}>{item.release.title} ({item.release.date})</a></div>
+                <div class="mt-2 flex space-x-2">
+                  <button title="Play on Youtube" onclick={async () => await playTrackOnYt(item, toast) }><IconYoutubeIcon /></button>
+                  <button title="Play on Spotify" onclick={async () => await playTrackOnSpotify(item, toast)}><IconSpotify /></button>
+                </div>
               </div>
             </div>
           </div>
