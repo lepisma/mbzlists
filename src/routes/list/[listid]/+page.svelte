@@ -1,6 +1,6 @@
 <script lang='ts'>
   import { page } from '$app/stores';
-  import { onMount } from 'svelte';
+  import { onMount, getContext } from 'svelte';
   import SongDuration from '$lib/components/SongDuration.svelte';
   import PlayListDuration from '$lib/components/PlayListDuration.svelte';
   import PlayListPlayButton from '$lib/components/PlayListPlayButton.svelte';
@@ -15,6 +15,7 @@
   import IconCopy from 'virtual:icons/la/copy';
   import IconYoutubeIcon from 'virtual:icons/logos/youtube-icon';
   import IconSpotify from 'virtual:icons/logos/spotify';
+  import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
 
   let list: List = $state({
     viewId: $page.params.listid,
@@ -24,6 +25,7 @@
     lastModifiedOn: new Date(),
     isPublic: false,
   });
+  let toast: ToastContext = $state(getContext('toast'));
 
   async function cloneList() {
     let clonedList = await createList(`Copy of ${list.name}`, list.items);
@@ -76,8 +78,8 @@
           <div class="text-sm"><a class="anchor" href={`https://musicbrainz.org/artist/${item.artist.mbid}`}>{item.artist.title}</a></div>
           <div class="text-sm text-gray-500"><a class="anchor" href={`https://musicbrainz.org/release/${item.release.mbid}`}>{item.release.title} ({item.release.date})</a></div>
           <div class="mt-2 flex space-x-2">
-            <button title="Play on Youtube" onclick={async () => await playTrackOnYt(item) }><IconYoutubeIcon /></button>
-            <button title="Play on Spotify" onclick={async () => await playTrackOnSpotify(item)}><IconSpotify /></button>
+            <button title="Play on Youtube" onclick={async () => await playTrackOnYt(item, toast) }><IconYoutubeIcon /></button>
+            <button title="Play on Spotify" onclick={async () => await playTrackOnSpotify(item, toast)}><IconSpotify /></button>
           </div>
         </div>
       </div>

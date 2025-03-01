@@ -1,6 +1,6 @@
 <script lang='ts'>
   import { page } from '$app/stores';
-  import { onMount } from 'svelte';
+  import { onMount, getContext } from 'svelte';
   import debounce from 'lodash/debounce';
   import SongDuration from '$lib/components/SongDuration.svelte';
   import PlayListDuration from '$lib/components/PlayListDuration.svelte';
@@ -19,6 +19,7 @@
   import { overrideItemIdKeyNameBeforeInitialisingDndZones, dndzone } from 'svelte-dnd-action';
   import { flip } from 'svelte/animate';
   import { OutClick } from 'svelte-outclick';
+  import type { ToastContext } from '@skeletonlabs/skeleton-svelte';
 
   overrideItemIdKeyNameBeforeInitialisingDndZones('mbid');
 
@@ -32,6 +33,7 @@
      isPublic: false,
   });
 
+  let toast: ToastContext = $state(getContext('toast'));
   let searchQuery = $state('');
   let searchResults = $state([]);
   let showDropdown = $state(false);
@@ -140,8 +142,8 @@
               <div class="text-sm"><a class="anchor" href={`https://musicbrainz.org/artist/${item.artist.mbid}`}>{item.artist.title}</a></div>
               <div class="text-sm text-gray-500"><a class="anchor" href={`https://musicbrainz.org/release/${item.release.mbid}`}>{item.release.title} ({item.release.date})</a></div>
               <div class="mt-2 flex space-x-2">
-                <button title="Play on Youtube" onclick={async () => await playTrackOnYt(item) }><IconYoutubeIcon /></button>
-                <button title="Play on Spotify" onclick={async () => await playTrackOnSpotify(item)}><IconSpotify /></button>
+                <button title="Play on Youtube" onclick={async () => await playTrackOnYt(item, toast) }><IconYoutubeIcon /></button>
+                <button title="Play on Spotify" onclick={async () => await playTrackOnSpotify(item, toast)}><IconSpotify /></button>
               </div>
             </div>
           </div>

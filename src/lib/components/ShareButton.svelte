@@ -6,7 +6,7 @@
   import IconLock from 'virtual:icons/la/lock';
   import IconGlobe from 'virtual:icons/la/globe';
   import { Modal, Switch } from '@skeletonlabs/skeleton-svelte';
-  import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
+  import type { ToastContext } from '@skeletonlabs/skeleton-svelte';
   import QrCode from './QrCode.svelte';
   import { saveList } from '$lib/ops';
 
