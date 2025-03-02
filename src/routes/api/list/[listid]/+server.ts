@@ -1,14 +1,16 @@
 import db from '$lib/server/db';
 import { json } from '@sveltejs/kit';
 import { create as createXML } from 'xmlbuilder2';
-
+import * as vars from '$env/dynamic/public';
 
 async function generateXSPF(list) {
+  let listURL = new URL(`/list/${list.viewId}`, vars.env.PUBLIC_BASE_URL ?? 'https://mbzlists.com/');
+
   const root = createXML({ version: '1.0', encoding: 'UTF-8' })
     .ele('playlist', { version: '1', xmlns: 'http://xspf.org/ns/0' })
     .ele('title').txt(list.name).up()
     .ele('creator').txt('mbzlists').up()
-    .ele('info').txt(`https://mbzlists.com/list/${list.viewId}`).up()
+    .ele('info').txt(listURL.href).up()
     .ele('date').txt(list.createdOn.toISOString()).up()
     .ele('tracklist');
 
