@@ -1,13 +1,13 @@
 <script lang='ts'>
   import { onMount, getContext } from 'svelte';
   import { browser } from '$app/environment';
-  import type { Song } from '$lib/types';
+  import type { Song, EditableList } from '$lib/types';
   import { lengthToDuration } from '$lib/utils';
   import type { ToastContext } from '@skeletonlabs/skeleton-svelte';
-import { playTrackOnYt, playTrackOnSpotify } from '$lib/playback';
+  import { playTrackOnYt, playTrackOnSpotify } from '$lib/playback';
 
   let toast: ToastContext = $state(getContext('toast'));
-  let { list, isEdit = false } = $props();
+  let { list, editCallback = null } = $props();
 
   if (browser) {
     // HACK: We put most of the items on the global namespace for now
@@ -20,6 +20,22 @@ import { playTrackOnYt, playTrackOnSpotify } from '$lib/playback';
       let song = list.items.find(it => it.mbid == mbid);
       playTrackOnSpotify(song, toast);
     }
+  }
+
+  function parseDescription(blocks: any[]): string {
+    let block = blocks.find(b => b.type == 'paragraph');
+    if (block) {
+      return block.data.text;
+    } else {
+      return '';
+    }
+  }
+
+  function parseList(blocks: any[]): EditableList {
+    let newList = {...list};
+    newList.description = parseDescription(blocks);
+    window.list = newList;
+    return newList;
   }
 
   const styleText = `
@@ -82,6 +98,10 @@ import { playTrackOnYt, playTrackOnSpotify } from '$lib/playback';
     return container;
   }
 
+  function renderSearch(): HTMLDivElement {
+    return document.createElement('input');
+  }
+
   class MBRecording {
     static get isReadOnlySupported() {
       return true;
@@ -103,20 +123,12 @@ import { playTrackOnYt, playTrackOnSpotify } from '$lib/playback';
       if (this.data.title) {
         return renderSong(this.data);
       } else {
-        return document.createElement('input');
+        return renderSearch();
       }
     }
 
-    save(blockContent): Song {
-      return {
-        mbid: blockContent.value,
-        title: '',
-        artist: {
-        },
-        release: {
-        },
-        length: ''
-      }
+    save(blockContent) {
+      return this.data;
     }
   }
 
@@ -132,7 +144,7 @@ import { playTrackOnYt, playTrackOnSpotify } from '$lib/playback';
 
       editor = new EditorJS({
         autofocus: true,
-        readOnly: !isEdit,
+        readOnly: editCallback === null,
         holder: editorEl,
         minHeight: 20,
         tools: {
@@ -160,8 +172,13 @@ import { playTrackOnYt, playTrackOnSpotify } from '$lib/playback';
         onReady: () => {
           new DragDrop(editor);
         },
-        onChange: (api, event) => {
-          console.log('Content changed', event)
+        onChange: (api, _) => {
+          api.saver.save().then(async (outputData) => {
+            let newList = parseList(outputData.blocks);
+            await editCallback(newList);
+          }).catch((error) => {
+            toast.create({ type: 'error', description: `Error while saving: ${error}` });
+          })
         },
         data: {
           time: Date.now(),

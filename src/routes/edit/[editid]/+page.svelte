@@ -99,7 +99,10 @@
   {#if list.items.length === 0}
     <p class="italic">Your list is empty. Search for songs to add!</p>
   {:else}
-    <PlayListEditor list={list} isEdit={true}/>
+    <PlayListEditor list={list} editCallback={async (newList) => {
+      list = {...newList, lastModifiedOn: new Date()};
+      await saveList(list);
+    }}/>
   {/if}
 </div>
 

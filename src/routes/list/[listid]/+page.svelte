@@ -52,6 +52,6 @@
   {#if list.items.length === 0}
     <p class="italic">This list is empty</p>
   {:else}
-    <PlayListEditor list={list} isEdit={false} />
+    <PlayListEditor list={list} />
   {/if}
 </div>
