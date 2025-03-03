@@ -1,13 +1,19 @@
 <script lang='ts'>
   import { onMount, getContext } from 'svelte';
   import { browser } from '$app/environment';
+  import debounce from 'lodash/debounce';
   import type { Song, EditableList } from '$lib/types';
+  import { queryMB } from '$lib/mb';
   import { lengthToDuration } from '$lib/utils';
   import type { ToastContext } from '@skeletonlabs/skeleton-svelte';
   import { playTrackOnYt, playTrackOnSpotify } from '$lib/playback';
 
   let toast: ToastContext = $state(getContext('toast'));
   let { list, editCallback = null } = $props();
+
+  let searchQuery = $state('');
+  let searchResults = $state([]);
+  let showDropdown = $state(false);
 
   if (browser) {
     // HACK: We put most of the items on the global namespace for now
@@ -22,19 +28,28 @@
     }
   }
 
-  function parseDescription(blocks: any[]): string {
-    let block = blocks.find(b => b.type === 'paragraph');
-    if (block) {
-      return block.data.text;
-    } else {
-      return '';
-    }
+  function listToBlocks(list: EditableList): any[] {
+    return [
+      {
+        type: 'paragraph',
+        data: {
+          text: list.description
+        }
+      },
+      ...list.items.map((it: Song) => {
+        return {
+          type: 'mbrecording',
+          data: it
+        }
+      })
+    ]
   }
 
-  function parseList(blocks: any[]): EditableList {
+  function blocksToList(blocks: any[]): EditableList {
     let newList = {...list};
-    newList.description = parseDescription(blocks);
-    newList.items = blocks.filter(b => b.type === 'mbrecording').map(b => b.data);
+    let block = blocks.find(b => b.type === 'paragraph');
+    newList.description = block ? block.data.text : '';
+    newList.items = blocks.filter(b => b.type === 'mbrecording' && b.data.title).map(b => b.data);
     window.list = newList;
     return newList;
   }
@@ -49,6 +64,43 @@
       text-decoration: underline;
     }
   `;
+
+  async function searchSongs(query, selectionCallback) {
+    if (!query.trim()) {
+      searchResults = [];
+      showDropdown = false;
+      return;
+    }
+
+    let dropdownEl = document.getElementById('search-dropdown');
+
+    searchResults = await queryMB(query);
+    if (searchResults.length > 0) {
+      for (let song of searchResults) {
+        let songContainer = document.createElement('div');
+        songContainer.className = 'p-3 hover:bg-primary-100 dark:hover:bg-primary-700 cursor-pointer transition-colors duration-150';
+        songContainer.onclick = () => selectionCallback(song);
+
+        let titleLine = document.createElement('div');
+        let artistLine = document.createElement('div');
+        let releaseLine = document.createElement('div');
+
+        titleLine.innerHTML = `<div class='font-medium text-gray-900 dark:text-gray-100'>${song.title} <span class='text-sm text-gray-500'>${lengthToDuration(song.length)}</span></div>`;
+        artistLine.innerHTML = `<div class='text-sm text-gray-500 dark:text-gray-200'>${song.artist.title}</div>`;
+        releaseLine.innerHTML = `<div class='text-sm text-gray-500 dark:text-gray-200'>${song.release.title} (${song.release.date})</div>`;
+
+        songContainer.append(titleLine, artistLine, releaseLine);
+        dropdownEl.append(songContainer);
+      }
+    } else {
+      dropdownEl.innerHTML = '';
+    }
+  }
+
+  const handleInput = debounce((e, callback) => {
+    searchQuery = e.target.value;
+    searchSongs(searchQuery, callback);
+  }, 300);
 
   function renderCoverArt(releaseId: string): HTMLDivElement {
     const coverArt = document.createElement('div');
@@ -99,8 +151,23 @@
     return container;
   }
 
-  function renderSearch(): HTMLDivElement {
-    return document.createElement('input');
+  function renderSearch(searchCallback): HTMLDivElement {
+    let container = document.createElement('div');
+    container.className = 'mt-4 relative';
+    container.id = 'search-container';
+
+    let input = document.createElement('input');
+    input.className = 'w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-400 focus:border-transparent';
+    input.placeholder = 'Search and add songs using MusicBrainz Lucene syntax...';
+    input.oninput = (e) => handleInput(e, searchCallback);
+
+    let dropdown = document.createElement('div');
+    dropdown.className = 'absolute w-full bg-white dark:bg-gray-800 mt-1 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 max-h-60 overflow-y-auto z-10';
+    dropdown.id = 'search-dropdown';
+
+    container.append(input, dropdown);
+
+    return container;
   }
 
   class MBRecording {
@@ -121,11 +188,22 @@
     }
 
     render() {
+      this.parentContainer = this.parentContainer || document.createElement('div');
+
       if (this.data.title) {
-        return renderSong(this.data);
+        let songContainer = renderSong(this.data);
+        this.parentContainer.appendChild(songContainer);
+
+        return this.parentContainer;
       } else {
-        return renderSearch();
+        let searchContainer = renderSearch(searchedData => {
+          this.data = searchedData;
+          this.parentContainer.innerHTML = '';
+          this.parentContainer.append(renderSong(this.data));
+        });
+        this.parentContainer.appendChild(searchContainer);
       }
+      return this.parentContainer;
     }
 
     save(blockContent) {
@@ -135,6 +213,7 @@
 
   let editor = $state(null);
   let editorEl = null;
+
   onMount(async () => {
     try {
       const { default: EditorJS } = await import('@editorjs/editorjs');
@@ -175,7 +254,7 @@
         },
         onChange: (api, _) => {
           api.saver.save().then(async (outputData) => {
-            let newList = parseList(outputData.blocks);
+            let newList = blocksToList(outputData.blocks);
             await editCallback(newList);
           }).catch((error) => {
             toast.create({ type: 'error', description: `Error while saving: ${error}` });
@@ -183,20 +262,7 @@
         },
         data: {
           time: Date.now(),
-          blocks: [
-            {
-              type: 'paragraph',
-              data: {
-                text: list.description
-              }
-            },
-            ...list.items.map((it: Song) => {
-              return {
-                type: 'mbrecording',
-                data: it
-              }
-            })
-          ]
+          blocks: listToBlocks(list)
         }
       });
     } catch (error) {
