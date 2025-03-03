@@ -32,7 +32,7 @@
   <title>{list.name} | mbzlists</title>
 </svelte:head>
 
-<div class="mb-7">
+<div class="mb-3">
   <h2 class="text-4xl font-semibold mb-2">{list.name}</h2>
   <div class="text-sm text-gray-400">
     <span title={list.createdOn}>Created: {formatDistanceToNow(list.createdOn, { addSuffix: true })}, </span>

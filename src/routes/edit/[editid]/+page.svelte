@@ -99,7 +99,7 @@
   <title>{list.name} [editing] | mbzlists</title>
 </svelte:head>
 
-<div class="mb-7">
+<div class="mb-3">
   <div>
     <input
       type="text"
