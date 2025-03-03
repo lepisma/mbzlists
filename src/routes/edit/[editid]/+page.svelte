@@ -16,7 +16,7 @@
      viewId: '',
      editId: $page.params.editid,
      name: '',
-     blocks: [{ type: 'paragraph', data: { text:  'Start adding text and songs here!'}}],
+     blocks: [],
      createdOn: new Date(),
      lastModifiedOn: new Date(),
      isPublic: false,
