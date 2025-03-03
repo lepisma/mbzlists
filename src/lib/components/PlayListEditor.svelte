@@ -23,7 +23,7 @@
   }
 
   function parseDescription(blocks: any[]): string {
-    let block = blocks.find(b => b.type == 'paragraph');
+    let block = blocks.find(b => b.type === 'paragraph');
     if (block) {
       return block.data.text;
     } else {
@@ -34,6 +34,7 @@
   function parseList(blocks: any[]): EditableList {
     let newList = {...list};
     newList.description = parseDescription(blocks);
+    newList.items = blocks.filter(b => b.type === 'mbrecording').map(b => b.data);
     window.list = newList;
     return newList;
   }
