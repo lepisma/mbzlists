@@ -17,14 +17,17 @@ export interface Song {
   length?: number;
 }
 
+interface Block {
+  type: string;
+  data: Song | any;
+}
+
 export interface List {
   readonly viewId: string;
   readonly name: string;
-  readonly items: readonly Song[];
+  readonly blocks: readonly Block[];
   readonly createdOn: Date;
   readonly lastModifiedOn: Date;
-  readonly coverArt?: Blob;
-  readonly description?: string;
   readonly isPublic: boolean;
 }
 
@@ -33,8 +36,6 @@ export interface ListMetadata {
   readonly name: string;
   readonly createdOn: Date;
   readonly lastModifiedOn: Date;
-  readonly coverArt?: Blob;
-  readonly description?: string;
   readonly isPublic: boolean;
 }
 
@@ -44,9 +45,7 @@ export interface EditableList {
   readonly createdOn: Date;
   lastModifiedOn: Date;
   name: string;
-  items: Song[];
-  coverArt?: Blob;
-  description?: string;
+  blocks: Block[];
   isPublic: boolean;
 }
 
@@ -56,7 +55,5 @@ export interface EditableListMetadata {
   readonly createdOn: Date;
   readonly lastModifiedOn: Date;
   readonly name: string;
-  readonly coverArt?: Blob;
-  readonly description?: string;
   readonly isPublic: boolean;
 }

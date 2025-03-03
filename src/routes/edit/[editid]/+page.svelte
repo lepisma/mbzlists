@@ -11,13 +11,12 @@
   import type { EditableList } from '$lib/types';
   import { rememberItem } from '$lib/utils';
   import { formatDistanceToNow } from 'date-fns';
-  import { OutClick } from 'svelte-outclick';
 
   let list: EditableList = $state({
      viewId: '',
      editId: $page.params.editid,
      name: '',
-     items: [],
+     blocks: [{ type: 'paragraph', data: { text:  'Start adding text and songs here!'}}],
      createdOn: new Date(),
      lastModifiedOn: new Date(),
      isPublic: false,
@@ -55,7 +54,7 @@
     <span title={list.lastModifiedOn}>modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
   </div>
 
-  <div class="mt-2 italic mb-4">Total {list.items.length} songs, duration: <PlayListDuration list={list} /></div>
+  <div class="mt-2 italic mb-4">Total {list.blocks.filter(b => b.type === 'mbrecording').length} songs, duration: <PlayListDuration list={list} /></div>
 
   <div class="flex space-x-2">
     <PlayListPlayButton list={list} />
@@ -65,8 +64,12 @@
 </div>
 
 <div>
-  {#if list.items.length === 0}
-    <p class="italic">Your list is empty. Search for songs to add!</p>
+  <!-- HACK: Forcing reactivity -->
+  {#if list.name === ''}
+    <PlayListEditor list={list} editCallback={async (newList) => {
+      list = {...newList, lastModifiedOn: new Date()};
+      await saveList(list);
+    }}/>
   {:else}
     <PlayListEditor list={list} editCallback={async (newList) => {
       list = {...newList, lastModifiedOn: new Date()};

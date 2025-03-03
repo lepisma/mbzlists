@@ -14,14 +14,16 @@ async function generateXSPF(list) {
     .ele('date').txt(list.createdOn.toISOString()).up()
     .ele('tracklist');
 
-  for (const item of list.items) {
-    root.ele('track')
-      .ele('title').txt(item.title).up()
-      .ele('creator').txt(item.artist.title).up()
-      .ele('album').txt(item.release.title).up()
-      .ele('info').txt(`https://musicbrainz.org/recording/${item.mbid}`).up()
-      .ele('location').txt(`https://musicbrainz.org/recording/${item.mbid}`).up()
-      .up();
+  for (const block of list.blocks) {
+    if (block.type === 'mbrecording') {
+      root.ele('track')
+        .ele('title').txt(block.data.title).up()
+        .ele('creator').txt(block.data.artist.title).up()
+        .ele('album').txt(block.data.release.title).up()
+        .ele('info').txt(`https://musicbrainz.org/recording/${block.data.mbid}`).up()
+        .ele('location').txt(`https://musicbrainz.org/recording/${block.data.mbid}`).up()
+        .up();
+    }
   }
 
   return root.up().up().end({ prettyPrint: true });
@@ -32,12 +34,12 @@ export async function GET({ params, request }) {
   const type = url.searchParams.get('type');
 
   if (type === 'xspf') {
-    const res: any = db.prepare('SELECT id, name, created_on, items FROM lists WHERE id = ?').get(params.listid);
+    const res: any = db.prepare('SELECT id, name, created_on, blocks FROM lists WHERE id = ?').get(params.listid);
 
     return new Response(await generateXSPF({
       ...res,
       viewId: res.id,
-      items: JSON.parse(res.items),
+      blocks: JSON.parse(res.blocks),
       createdOn: new Date(res.created_on)
     }), {
       headers: {
@@ -47,16 +49,14 @@ export async function GET({ params, request }) {
     })
   }
 
-  const res: any = db.prepare('SELECT id, name, created_on, last_modified_on, description, cover_art, is_public, items FROM lists WHERE id = ?').get(params.listid);
+  const res: any = db.prepare('SELECT id, name, created_on, last_modified_on, is_public, blocks FROM lists WHERE id = ?').get(params.listid);
 
   const list: any = {
     viewId: res.id,
     name: res.name,
-    items: JSON.parse(res.items),
+    blocks: JSON.parse(res.blocks),
     createdOn: res.created_on,
     lastModifiedOn: res.last_modified_on,
-    description: res.description,
-    coverArt: res.cover_art,
     isPublic: res.is_public === 1,
   };
 

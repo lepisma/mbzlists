@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import type { EditableList, EditableListMetadata, List, ListMetadata, Song } from './types';
+import type { EditableList, EditableListMetadata, List, ListMetadata, Block } from './types';
 import { v4 as uuidv4 } from 'uuid';
 import { recallItems, rememberItem, forgetItem } from '$lib/utils';
 
@@ -73,12 +73,12 @@ export async function recallLists(isEdit: boolean): Promise<EditableListMetadata
 }
 
 // Create a new list and save it in localstorage
-export async function createList(name: string, items: Song[]): Promise<EditableList> {
+export async function createList(name: string, blocks: Block[]): Promise<EditableList> {
   const list: EditableList = {
-    name: name,
+    name,
     editId: uuidv4(),
     viewId: uuidv4(),
-    items: items,
+    blocks,
     createdOn: new Date(),
     lastModifiedOn: new Date(),
     isPublic: false,
@@ -105,7 +105,7 @@ export async function saveList(list: EditableList) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       name: list.name,
-      items: list.items,
+      blocks: list.blocks,
       lastModifiedOn: list.lastModifiedOn.toISOString(),
       description: list.description,
       isPublic: list.isPublic,

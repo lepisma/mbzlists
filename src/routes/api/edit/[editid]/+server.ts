@@ -2,18 +2,16 @@ import db from '$lib/server/db';
 import { json } from '@sveltejs/kit';
 
 export function GET({ params }) {
-  const res: any = db.prepare('SELECT id, name, created_on, last_modified_on, description, cover_art, is_public, items FROM lists WHERE edit_id = ?').get(params.editid);
+  const res: any = db.prepare('SELECT id, name, created_on, last_modified_on, is_public, blocks FROM lists WHERE edit_id = ?').get(params.editid);
 
   if (res) {
     return json({
       editId: params.editid,
       viewId: res.id,
       name: res.name,
-      items: JSON.parse(res.items),
+      blocks: JSON.parse(res.blocks),
       createdOn: res.created_on,
       lastModifiedOn: res.last_modified_on,
-      description: res.description,
-      coverArt: res.cover_art,
       isPublic: res.is_public === 1,
     });
   } else {
@@ -22,23 +20,11 @@ export function GET({ params }) {
 }
 
 export async function POST({ params, request }) {
-  const { viewId, items, name, lastModifiedOn, createdOn, description, isPublic, coverArt } = await request.json();
+  const { viewId, blocks, name, lastModifiedOn, createdOn, isPublic } = await request.json();
 
-  let fields = 'id, edit_id, name, items, created_on, last_modified_on, is_public';
+  let fields = 'id, edit_id, name, blocks, created_on, last_modified_on, is_public';
   let valuesString = '?, ?, ?, ?, ?, ?, ?';
-  let values = [viewId, params.editid, name, JSON.stringify(items), createdOn, lastModifiedOn, isPublic ? 1 : 0];
-
-  if (description !== undefined) {
-    fields += ', description';
-    valuesString += ', ?';
-    values.push(description);
-  }
-
-  if (coverArt !== undefined) {
-    fields += ', cover_art';
-    valuesString += ', ?';
-    values.push(coverArt);
-  }
+  let values = [viewId, params.editid, name, JSON.stringify(blocks), createdOn, lastModifiedOn, isPublic ? 1 : 0];
 
   try {
     db.prepare(`INSERT INTO lists (${fields}) VALUES (${valuesString})`).run(values);
@@ -49,7 +35,7 @@ export async function POST({ params, request }) {
 }
 
 export async function PATCH({ params, request }) {
-  const { items, name, lastModifiedOn, description, isPublic, coverArt }  = await request.json();
+  const { blocks, name, lastModifiedOn, isPublic }  = await request.json();
 
   let updates: string[] = [];
   let values = [];
@@ -59,9 +45,9 @@ export async function PATCH({ params, request }) {
     values.push(name);
   }
 
-  if (items !== undefined) {
-    updates.push('items = ?');
-    values.push(JSON.stringify(items));
+  if (blocks !== undefined) {
+    updates.push('blocks = ?');
+    values.push(JSON.stringify(blocks));
   }
 
   if (lastModifiedOn !== undefined) {
@@ -69,19 +55,9 @@ export async function PATCH({ params, request }) {
     values.push(lastModifiedOn);
   }
 
-  if (description !== undefined) {
-    updates.push('description = ?');
-    values.push(description);
-  }
-
   if (isPublic !== undefined) {
     updates.push('is_public = ?');
     values.push(isPublic ? 1 : 0);
-  }
-
-  if (coverArt !== undefined) {
-    updates.push('cover_art = ?');
-    values.push(coverArt);
   }
 
   if (updates.length === 0) {

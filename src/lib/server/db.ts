@@ -26,10 +26,8 @@ if (!building) {
     name TEXT NOT NULL,
     created_on TEXT NOT NULL,
     last_modified_on TEXT NOT NULL,
-    description TEXT,
-    cover_art BLOB,
     is_public BOOLEAN DEFAULT FALSE,
-    items TEXT DEFAULT '[]'
+    blocks TEXT DEFAULT '[]'
   )`);
 }
 

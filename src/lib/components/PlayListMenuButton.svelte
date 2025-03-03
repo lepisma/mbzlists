@@ -1,9 +1,6 @@
 <script lang='ts'>
-  import { playListOnYt } from '$lib/playback';
   import { getContext } from 'svelte';
   import { goto } from '$app/navigation';
-  import IconPlay from 'virtual:icons/la/play';
-  import IconYoutubeIcon from 'virtual:icons/logos/youtube-icon';
   import IconBars from 'virtual:icons/la/bars';
   import IconCopy from 'virtual:icons/la/copy';
   import IconTrash from 'virtual:icons/la/trash';
@@ -16,7 +13,7 @@
   let toast: ToastContext = $state(getContext('toast'));
 
   async function cloneList() {
-    let clonedList = await createList(`Copy of ${list.name}`, list.items);
+    let clonedList = await createList(`Copy of ${list.name}`, list.blocks);
     window.open(`/edit/${clonedList.editId}`, '_blank');
   }
 </script>

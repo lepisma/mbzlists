@@ -16,40 +16,20 @@
   let showDropdown = $state(false);
 
   if (browser) {
-    // HACK: We put most of the items on the global namespace for now
+    // HACK: We put some of the items on the global namespace for now
     window.list = list;
     window.playMBIDOnYt = function playMBIDOnYt(mbid: string) {
-      let song = list.items.find(it => it.mbid == mbid);
+      let song = list.blocks.filter(b => b.type === 'mbrecording').map(b => b.data).find(it => it.mbid == mbid);
       playTrackOnYt(song, toast);
     }
     window.playMBIDOnSpotify = function playMBIDOnSpotify(mbid: string) {
-      let song = list.items.find(it => it.mbid == mbid);
+      let song = list.blocks.filter(b => b.type === 'mbrecording').map(b => b.data).find(it => it.mbid == mbid);
       playTrackOnSpotify(song, toast);
     }
   }
 
-  function listToBlocks(list: EditableList): any[] {
-    return [
-      {
-        type: 'paragraph',
-        data: {
-          text: list.description
-        }
-      },
-      ...list.items.map((it: Song) => {
-        return {
-          type: 'mbrecording',
-          data: it
-        }
-      })
-    ]
-  }
-
   function blocksToList(blocks: any[]): EditableList {
-    let newList = {...list};
-    let block = blocks.find(b => b.type === 'paragraph');
-    newList.description = block ? block.data.text : '';
-    newList.items = blocks.filter(b => b.type === 'mbrecording' && b.data.title).map(b => b.data);
+    let newList = {...list, blocks};
     window.list = newList;
     return newList;
   }
@@ -262,7 +242,7 @@
         },
         data: {
           time: Date.now(),
-          blocks: listToBlocks(list)
+          blocks: list.blocks
         }
       });
     } catch (error) {
