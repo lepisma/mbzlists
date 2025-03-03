@@ -1,23 +1,15 @@
 <script lang='ts'>
   import { page } from '$app/stores';
-  import { onMount, getContext } from 'svelte';
-  import SongDuration from '$lib/components/SongDuration.svelte';
+  import { onMount } from 'svelte';
   import PlayListDuration from '$lib/components/PlayListDuration.svelte';
   import PlayListPlayButton from '$lib/components/PlayListPlayButton.svelte';
   import PlayListMenuButton from '$lib/components/PlayListMenuButton.svelte';
   import PlayListEditor from '$lib/components/PlayListEditor.svelte';
   import ShareButton from '$lib/components/ShareButton.svelte';
   import { loadList  } from '$lib/ops';
-  import { getCoverArt } from '$lib/mb';
   import { rememberItem } from '$lib/utils';
   import type { List } from '$lib/types';
-  import { playTrackOnSpotify, playTrackOnYt } from '$lib/playback';
-  import { goto } from '$app/navigation';
   import { formatDistanceToNow } from 'date-fns';
-  import IconCopy from 'virtual:icons/la/copy';
-  import IconYoutubeIcon from 'virtual:icons/logos/youtube-icon';
-  import IconSpotify from 'virtual:icons/logos/spotify';
-  import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
 
   let list: List = $state({
     viewId: $page.params.listid,
@@ -28,8 +20,6 @@
     isPublic: false,
     description: '',
   });
-
-  let toast: ToastContext = $state(getContext('toast'));
 
   onMount(async () => {
     list = await loadList(list.viewId);
