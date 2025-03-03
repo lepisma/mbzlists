@@ -16,7 +16,7 @@
      viewId: '',
      editId: $page.params.editid,
      name: '',
-     blocks: [{ type: 'paragraph', data: { text:  'Start adding text and songs here!'}}],
+     blocks: [],
      createdOn: new Date(),
      lastModifiedOn: new Date(),
      isPublic: false,
@@ -64,6 +64,7 @@
 </div>
 
 <div>
+  <p class="italic">Content goes below! Use + sign to add songs.</p>
   <!-- HACK: Forcing reactivity -->
   {#if list.name === ''}
     <PlayListEditor list={list} editCallback={async (newList) => {
