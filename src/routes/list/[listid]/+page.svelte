@@ -39,10 +39,6 @@
     <span title={list.lastModifiedOn}>modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
   </div>
 
-  <div class="max-w-sm mt-2">
-    <p>{list.description}</p>
-  </div>
-
   <div class="mt-2 italic mb-4">Total {list.items.length} songs, duration <PlayListDuration list={list} /></div>
 
   <div class="flex space-x-2">

@@ -6,6 +6,7 @@
   import PlayListDuration from '$lib/components/PlayListDuration.svelte';
   import PlayListPlayButton from '$lib/components/PlayListPlayButton.svelte';
   import PlayListMenuButton from '$lib/components/PlayListMenuButton.svelte';
+  import PlayListEditor from '$lib/components/PlayListEditor.svelte';
   import ShareButton from '$lib/components/ShareButton.svelte';
   import { loadEditableList, saveList } from '$lib/ops';
   import { getCoverArt, queryMB } from '$lib/mb';
@@ -112,17 +113,6 @@
     <span title={list.lastModifiedOn}>modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
   </div>
 
-  <div class="max-w-sm mt-2">
-    <textarea
-      class="textarea rounded-container rounded-md"
-      rows="2"
-      placeholder="Add description for your list here"
-      bind:value={list.description}
-      oninput={handleDescriptionEdits}
-      >
-    </textarea>
-  </div>
-
   <div class="mt-2 italic mb-4">Total {list.items.length} songs, duration: <PlayListDuration list={list} /></div>
 
   <div class="flex space-x-2">
@@ -132,10 +122,12 @@
   </div>
 </div>
 
+
 <div>
   {#if list.items.length === 0}
     <p class="italic">Your list is empty. Search for songs to add!</p>
   {:else}
+    <PlayListEditor list={list} isEdit={true}/>
     <section use:dndzone={{ items: list.items, flipDurationMs: 200 }} onconsider={handleSort} onfinalize={handleSort}>
       {#each list.items as item(item.mbid)}
         <div class="flex items-center justify-between mt-2 p-3 pl-1 rounded-lg border shadow-md" animate:flip={{duration: 200}}>

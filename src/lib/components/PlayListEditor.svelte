@@ -156,12 +156,20 @@
         },
         data: {
           time: Date.now(),
-          blocks: list.items.map((it: Song) => {
-            return {
-              type: 'mbrecording',
-              data: it
-            }
-          })
+          blocks: [
+            {
+              type: 'paragraph',
+              data: {
+                text: list.description
+              }
+            },
+            ...list.items.map((it: Song) => {
+              return {
+                type: 'mbrecording',
+                data: it
+              }
+            })
+          ]
         }
       });
     } catch (error) {
