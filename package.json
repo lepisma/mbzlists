@@ -34,8 +34,14 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
+		"@editorjs/editorjs": "^2.30.8",
+		"@editorjs/embed": "^2.7.6",
+		"@editorjs/header": "^2.8.8",
+		"@editorjs/list": "^2.0.6",
+		"@editorjs/quote": "^2.7.6",
 		"better-sqlite3": "^11.8.1",
 		"date-fns": "^4.1.0",
+		"editorjs-drag-drop": "^1.1.16",
 		"lodash": "^4.17.21",
 		"p-memoize": "^7.1.1",
 		"qr-code-styling": "^1.9.1",

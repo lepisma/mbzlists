@@ -5,6 +5,7 @@
   import PlayListDuration from '$lib/components/PlayListDuration.svelte';
   import PlayListPlayButton from '$lib/components/PlayListPlayButton.svelte';
   import PlayListMenuButton from '$lib/components/PlayListMenuButton.svelte';
+  import PlayListEditor from '$lib/components/PlayListEditor.svelte';
   import ShareButton from '$lib/components/ShareButton.svelte';
   import { loadList  } from '$lib/ops';
   import { getCoverArt } from '$lib/mb';
@@ -65,27 +66,6 @@
   {#if list.items.length === 0}
     <p class="italic">This list is empty</p>
   {:else}
-    {#each list.items as item}
-      <div class="flex items-left mt-2 p-3 rounded-lg border shadow-sm">
-        {#await getCoverArt(item.release.mbid)}
-          <img src="" alt="" class="w-16 h-16 mr-2 object-cover placeholder animate-pulse rounded-md" />
-        {:then value}
-          <img src={value || "https://placehold.co/100?text=NA"} alt="" class="w-16 h-16 mr-2 object-cover rounded-md" />
-        {:catch error}
-          <img src="https://placehold.co/100?text=NA" alt="" class="w-16 h-16 mr-2 object-cover rounded-md" />
-        {/await}
-        <div>
-          <div class="font-medium"><a class="anchor" href={`https://musicbrainz.org/recording/${item.mbid}`}>{item.title}</a>
-            <span class="text-sm text-gray-500"><SongDuration song={item} /></span>
-          </div>
-          <div class="text-sm"><a class="anchor" href={`https://musicbrainz.org/artist/${item.artist.mbid}`}>{item.artist.title}</a></div>
-          <div class="text-sm text-gray-500"><a class="anchor" href={`https://musicbrainz.org/release/${item.release.mbid}`}>{item.release.title} ({item.release.date})</a></div>
-          <div class="mt-2 flex space-x-2">
-            <button title="Play on Youtube" onclick={async () => await playTrackOnYt(item, toast) }><IconYoutubeIcon /></button>
-            <button title="Play on Spotify" onclick={async () => await playTrackOnSpotify(item, toast)}><IconSpotify /></button>
-          </div>
-        </div>
-      </div>
-    {/each}
+    <PlayListEditor list={list} isEdit={false} />
   {/if}
 </div>

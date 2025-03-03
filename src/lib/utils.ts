@@ -7,6 +7,18 @@ export function blobToDataURL(blob: Blob): Promise<string> {
   });
 }
 
+export function lengthToDuration(length: number | null): string {
+  if (length) {
+    let totalSeconds = Math.floor(length / 1000);
+    let minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+    let seconds = String(totalSeconds % 60).padStart(2, '0');
+
+    return `${minutes}:${seconds}`;
+  } else {
+    return '';
+  }
+}
+
 export function removeIfPresent(list: any[], item: any, keyFn: (a: any) => string) {
   const index = list.map(keyFn).indexOf(keyFn(item));
   if (index > -1) {
