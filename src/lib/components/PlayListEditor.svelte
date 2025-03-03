@@ -119,7 +119,6 @@
       const { default: Header } = await import('@editorjs/header');
       const { default: List } = await import('@editorjs/list');
       const { default: Quote } = await import('@editorjs/quote');
-      const { default: Embed } = await import('@editorjs/embed');
       const { default: DragDrop } = await import('editorjs-drag-drop');
 
       editor = new EditorJS({
@@ -147,16 +146,7 @@
               defaultStyle: 'unordered'
             },
           },
-          quote: Quote,
-          embed: {
-            class: Embed,
-            inlineToolbar: true,
-            config: {
-              services: {
-                youtube: true
-              }
-            }
-          },
+          quote: Quote
         },
         onReady: () => {
           new DragDrop(editor);
