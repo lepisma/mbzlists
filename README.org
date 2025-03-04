@@ -6,8 +6,8 @@ Self hosted, login-less, /annotated playlist manager/ based on Musicbrainz IDs. 
 came from the need of curating /static/ music playlists that not tied to any
 platform silos and that allow sharing more context than just a list of
 songs. With mbzlists, you can create and share a sort of /playlist blogs/ that can
-be reduced to plain lists for playback or compatibility as needed. Here is how a
-list could look like:
+be reduced to plain lists for playback or compatibility as needed. Here is an
+example:
 
 [[file:./screenshots/annotated.png]]
 
@@ -23,5 +23,8 @@ for keeping this file and then run the docker image using the following:
     -p 3000:3000 \
     -e PUBLIC_BASE_URL="https//mbzlists.com/" \
     --name mbzlists \
-    lepisma/mbzlists:0.1.0
+    lepisma/mbzlists:0.2.0
 #+end_src
+
+mbzlists depends on great projects like [[https://musicbrainz.org/][musicbrainz]], [[https://listenbrainz.org/][listenbrainz]], and [[https://editorjs.io/][editorjs]],
+among others to function.
