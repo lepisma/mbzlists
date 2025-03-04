@@ -2,7 +2,7 @@
 
 [[https://img.shields.io/github/v/tag/lepisma/mbzlists.svg]] [[https://img.shields.io/docker/v/lepisma/mbzlists.svg]]
 
-Self hosted, login-less, /annotated playlist manager/ based on Musicbrainz IDs. It
+Self hosted, login-free, /annotated playlist manager/ based on Musicbrainz IDs. It
 came from the need of curating /static/ music playlists that not tied to any
 platform silos and that allow sharing more context than just a list of
 songs. With mbzlists, you can create and share a sort of /playlist blogs/ that can

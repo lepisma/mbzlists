@@ -30,11 +30,10 @@
       </header>
       <article class="space-y-3">
         <p>
-          <i>mbzlists</i> is a login-less, anonymous, annotated playlist manager
-          based on
+          <i>mbzlists</i> is a login-free annotated playlist manager based on
           <a href="https://musicbrainz.org/" class="anchor">MusicBrainz's</a>
-          global IDs. Its goal is to allow music curation with shareable context
-          without locking you up in platform silos.
+          global IDs. Its goal is to allow high context music curation without
+          locking you up in platform silos.
         </p>
       </article>
       {/snippet}
@@ -54,19 +53,19 @@
         </header>
         <article class="space-y-3">
           <p>
-            There are no personally identified information stored in this
-            tool. As you create lists, your device <i>remembers</i> them by
-            storing in its local storage. If you change devices or don't
-            remember edit or view link of a list, you will loose them.
+            There are no personally identified information stored here. As you
+            create lists, your device <i>remembers</i> them by storing in its
+            local storage. If you change devices or don't remember edit or view
+            link of a list, you will loose them.
           </p>
           <p>
-            mbzlists.com will periodically release list-only database dumps
-            under a non-commercial license for research on song
-            groupings. Additionally a feature to collectively export your lists
-            will be added soon.
+            On mbzlists.com, public lists will be downloadable under a
+            non-commercial license. Your own private lists can be downloaded in
+            a dump. These export features are yet to be added.
           </p>
           <p>
-            You can self-host <i>mbzlists</i>. Check out <a class="anchor"
+            You can self-host <i>mbzlists</i> to get even more control on your
+            data. Check out <a class="anchor"
             href="https://github.com/lepisma/mbzlists">the source</a> for that.
           </p>
         </article>
