@@ -29,6 +29,13 @@ if (!building) {
     is_public BOOLEAN DEFAULT FALSE,
     blocks TEXT DEFAULT '[]'
   )`);
+
+  db.exec(`
+  CREATE TABLE IF NOT EXISTS images (
+    id TEXT PRIMARY KEY,
+    data BLOB NOT NULL,
+    mime_type TEXT NOT NULL
+  )`);
 }
 
 export default db;

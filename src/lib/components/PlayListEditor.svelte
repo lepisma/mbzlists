@@ -207,6 +207,7 @@
       const { default: List } = await import('@editorjs/list');
       const { default: Quote } = await import('@editorjs/quote');
       const { default: DragDrop } = await import('editorjs-drag-drop');
+      const { default: Image } = await import('@editorjs/image');
 
       editor = new EditorJS({
         autofocus: true,
@@ -224,6 +225,14 @@
               placeholder: 'Enter a header',
               levels: [2, 3, 4],
               defaultLevel: 3
+            }
+          },
+          image: {
+            class: Image,
+            config: {
+              endpoints: {
+                byFile: `/api/image`
+              }
             }
           },
           list: {
