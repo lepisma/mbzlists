@@ -2,15 +2,20 @@
 
 [[https://img.shields.io/github/v/tag/lepisma/mbzlists.svg]] [[https://img.shields.io/docker/v/lepisma/mbzlists.svg]]
 
-Self hosted, login-less, universal playlists manager based on Musicbrainz
-IDs. It came from the need of curating /static/ music playlists that not tied to
-any platform silos.
+Self hosted, login-less, /annotated playlist manager/ based on Musicbrainz IDs. It
+came from the need of curating /static/ music playlists that not tied to any
+platform silos and that allow sharing more context than just a list of
+songs. With mbzlists, you can create and share a sort of /playlist blogs/ that can
+be reduced to plain lists for playback or compatibility as needed. Here is how a
+list could look like:
+
+[[file:./screenshots/annotated.png][screenshot]]
 
 A public version is hosted at [[https://mbzlists.com/][https://mbzlists.com/]] which you can use. To self
 host, you can do the following:
 
-Create a data directory for keeping SQLite database and then run mount it using
-the following:
+All data is kept in a single SQLite database for now. Create a data directory
+for keeping this file and then run the docker image using the following:
 
 #+begin_src shell
   docker run -d \
