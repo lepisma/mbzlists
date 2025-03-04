@@ -46,7 +46,7 @@
   {#snippet content()}
   <Tabs.Panel value="mylists">
     <h3 class="mb-4 italic">
-      Total {editableLists.length} playlists remembered on this device. These are lists that you can edit.
+      Total {editableLists.length} {editableLists.length == 1 ? 'playlist' : 'playlists'} remembered on this device. These are lists that you can edit.
     </h3>
 
     <div class="mb-5">
@@ -74,7 +74,7 @@
   </Tabs.Panel>
   <Tabs.Panel value="shared">
     <h3 class="mb-4 italic">
-      Total {viewableLists.length} view-only playlists remembered on this device.
+      Total {viewableLists.length} view-only {viewableLists.length == 1 ? 'playlist' : 'playlists'} remembered on this device.
     </h3>
 
     <div class="space-y-2 col-span-full">
@@ -90,7 +90,7 @@
   </Tabs.Panel>
   <Tabs.Panel value="public">
     <h3 class="mb-4 italic">
-      Total {publicLists.length} public playlists. These are lists that people have made public on this server.
+      Total {publicLists.length} public {publicLists.length == 1 ? 'playlist' : 'playlists'} that people have made public on this server.
     </h3>
 
     <div class="space-y-2 col-span-full">
