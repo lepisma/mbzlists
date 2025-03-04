@@ -64,7 +64,7 @@
 </div>
 
 <div>
-  <p class="italic">Content goes below! Use + sign to add songs.</p>
+  <p class="italic text-gray-400">Content goes below! Use + sign to add songs.</p>
   <!-- HACK: Forcing reactivity -->
   {#if list.name === ''}
     <PlayListEditor list={list} editCallback={async (newList) => {
