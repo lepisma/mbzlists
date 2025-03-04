@@ -9,7 +9,7 @@ songs. With mbzlists, you can create and share a sort of /playlist blogs/ that c
 be reduced to plain lists for playback or compatibility as needed. Here is how a
 list could look like:
 
-[[file:./screenshots/annotated.png][screenshot]]
+[[file:./screenshots/annotated.png]]
 
 A public version is hosted at [[https://mbzlists.com/][https://mbzlists.com/]] which you can use. To self
 host, you can do the following:
