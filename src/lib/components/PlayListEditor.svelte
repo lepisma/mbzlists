@@ -12,7 +12,6 @@
 
   let searchQuery = $state('');
   let searchResults = $state([]);
-  let showDropdown = $state(false);
 
   const styleText = `
     a.anchor {
@@ -25,16 +24,26 @@
     }
   `;
 
+  function showDropdown() {
+    let dropdownEl = document.getElementById('search-dropdown');
+    dropdownEl.style.display = null;
+  }
+
+  function hideDropdown() {
+    let dropdownEl = document.getElementById('search-dropdown');
+    dropdownEl.style.display = 'none';
+  }
+
   async function searchSongs(query, selectionCallback) {
     if (!query.trim()) {
       searchResults = [];
-      showDropdown = false;
       return;
     }
 
     let dropdownEl = document.getElementById('search-dropdown');
 
     searchResults = await queryMB(query);
+    dropdownEl.innerHTML = '';
     if (searchResults.length > 0) {
       for (let song of searchResults) {
         let songContainer = document.createElement('div');
@@ -51,15 +60,20 @@
 
         songContainer.append(titleLine, artistLine, releaseLine);
         dropdownEl.append(songContainer);
+        showDropdown();
       }
     } else {
-      dropdownEl.innerHTML = '';
+      hideDropdown();
     }
   }
 
   const handleInput = debounce((e, callback) => {
     searchQuery = e.target.value;
-    searchSongs(searchQuery, callback);
+    if (searchQuery) {
+      searchSongs(searchQuery, callback);
+    } else {
+      hideDropdown();
+    }
   }, 300);
 
   function renderCoverArt(releaseId: string): HTMLDivElement {
@@ -126,7 +140,6 @@
   function renderSearch(searchCallback): HTMLDivElement {
     let container = document.createElement('div');
     container.className = 'mt-4 relative';
-    container.id = 'search-container';
 
     let input = document.createElement('input');
     input.className = 'w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-400 focus:border-transparent';
@@ -136,6 +149,7 @@
     let dropdown = document.createElement('div');
     dropdown.className = 'absolute w-full bg-white dark:bg-gray-800 mt-1 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 max-h-60 overflow-y-auto z-10';
     dropdown.id = 'search-dropdown';
+    dropdown.style.display = 'none';
 
     container.append(input, dropdown);
 
