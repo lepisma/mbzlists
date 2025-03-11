@@ -35,7 +35,8 @@
   .inlineToolButton::selection,
   .ce-toolbar__plus::selection,
   .ce-toolbar__settings-btn::selection,
-  .ce-popover__search::selection {
+  .ce-popover__search::selection,
+  .codex-editor ::selection {
     @apply bg-primary-700 text-gray-100;
   }
 
