@@ -13,17 +13,6 @@
   let searchQuery = $state('');
   let searchResults = $state([]);
 
-  const styleText = `
-    a.anchor {
-      text-decoration: none;
-      color: reset;
-    }
-
-    a.anchor:hover {
-      text-decoration: underline;
-    }
-  `;
-
   function showDropdown() {
     let dropdownEl = document.getElementById('search-dropdown');
     dropdownEl.style.display = null;
@@ -54,7 +43,7 @@
         let artistLine = document.createElement('div');
         let releaseLine = document.createElement('div');
 
-        titleLine.innerHTML = `<div class='font-medium text-gray-900 dark:text-gray-100'>${song.title} <span class='text-sm text-gray-500'>${lengthToDuration(song.length)}</span></div>`;
+        titleLine.innerHTML = `<div class='font-medium text-gray-900 dark:text-gray-100'>${song.title} <span class='text-sm text-gray-500 dark:text-gray-400'>${lengthToDuration(song.length)}</span></div>`;
         artistLine.innerHTML = `<div class='text-sm text-gray-500 dark:text-gray-200'>${song.artist.title}</div>`;
         releaseLine.innerHTML = `<div class='text-sm text-gray-500 dark:text-gray-200'>${song.release.title} (${song.release.date})</div>`;
 
@@ -91,9 +80,6 @@
 
   function renderSong(song: Song): HTMLDivElement {
     let head = document.head || document.getElementsByTagName('head')[0];
-    let style = document.createElement('style');
-    head.appendChild(style);
-    style.appendChild(document.createTextNode(styleText));
 
     const container = document.createElement('div');
     container.className = 'flex mt-2 mb-2 p-2 pl-1 rounded-lg border shadow-md';
@@ -108,7 +94,7 @@
     const buttonsLine = document.createElement('div');
 
     titleLine.className = 'font-medium';
-    titleLine.innerHTML = `<a class='anchor' href='https://musicbrainz.org/recording/${song.mbid}'>${song.title}</a> <span class='text-sm text-gray-500'>${lengthToDuration(song.length)}</span>`;
+    titleLine.innerHTML = `<a class='anchor' href='https://musicbrainz.org/recording/${song.mbid}'>${song.title}</a> <span class='text-sm text-gray-500 dark:text-gray-400'>${lengthToDuration(song.length)}</span>`;
 
     artistLine.className = 'text-sm';
     artistLine.innerHTML = `<a class='anchor' href='https://musicbrainz.org/artist/${song.artist.mbid}'>${song.artist.title}</a>`

@@ -2,12 +2,25 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-.ce-block__content{
+.ce-block__content {
   @apply prose;
   margin: 0;
 }
 
+.ce-block__content a.anchor {
+  text-decoration: none;
+  color: reset;
+}
+
+.ce-block__content a.anchor:hover {
+  text-decoration: underline;
+}
+
 @media (prefers-color-scheme: dark) {
+  .ce-block__content a.anchor {
+    @apply text-white;
+  }
+
   .cdx-block,
   .ce-header,
   .inlineToolButton,
