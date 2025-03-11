@@ -6,3 +6,60 @@
   @apply prose;
   margin: 0;
 }
+
+@media (prefers-color-scheme: dark) {
+  .cdx-block,
+  .ce-header,
+  .inlineToolButton,
+  .ce-toolbar__plus,
+  .ce-toolbar__settings-btn,
+  .ce-popover__search {
+    @apply bg-gray-700 text-gray-100;
+  }
+
+  .cdx-block::selection,
+  .ce-header::selection,
+  .inlineToolButton::selection,
+  .ce-toolbar__plus::selection,
+  .ce-toolbar__settings-btn::selection,
+  .ce-popover__search::selection {
+    @apply bg-primary-700 text-gray-100;
+  }
+
+  .ce-toolbar__plus:hover,
+  .ce-toolbar__settings-btn:hover,
+  .cdx-loader,
+  .cdx-button {
+    @apply bg-gray-600 text-white transition-colors duration-200;
+  }
+
+  .cdx-button:hover {
+    @apply bg-primary-600;
+  }
+
+  .ce-popover__container {
+    @apply bg-gray-900 border border-gray-700 shadow-lg rounded-lg;
+  }
+
+  .ce-popover,
+  .ce-popover-item,
+  .ce-popover-item-html,
+  .ce-popover-item__icon,
+  .ce-popover-items,
+  .ce-popover-item:hover {
+    @apply bg-gray-800 text-gray-100 border-none;
+  }
+
+  .ce-inline-tool {
+    @apply text-gray-100;
+  }
+
+  .ce-inline-tool:hover,
+  .ce-popover-item:hover {
+    @apply bg-gray-600;
+  }
+
+  .cdx-search-field__input {
+    @apply input rounded-none pl-2;
+  }
+}
