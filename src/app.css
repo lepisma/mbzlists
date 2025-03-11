@@ -16,6 +16,21 @@
   text-decoration: underline;
 }
 
+
+.cdx-block::selection,
+.ce-header::selection,
+.inlineToolButton::selection,
+.ce-toolbar__plus::selection,
+.ce-toolbar__settings-btn::selection,
+.ce-popover__search::selection,
+.codex-editor ::selection {
+  @apply bg-primary-100;
+}
+
+.cdx-search-field__input {
+  @apply input rounded-none pl-2;
+}
+
 @media (prefers-color-scheme: dark) {
   .ce-block__content a.anchor {
     @apply text-white;
