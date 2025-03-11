@@ -23,7 +23,7 @@ for keeping this file and then run the docker image using the following:
     -p 3000:3000 \
     -e PUBLIC_BASE_URL="https//mbzlists.com/" \
     --name mbzlists \
-    lepisma/mbzlists:0.2.1
+    lepisma/mbzlists:latest
 #+end_src
 
 mbzlists depends on great projects like [[https://musicbrainz.org/][musicbrainz]], [[https://listenbrainz.org/][listenbrainz]], and [[https://editorjs.io/][editorjs]],
