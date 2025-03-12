@@ -28,8 +28,25 @@ export async function playListOnYt(list: List, toast: ToastContext) {
   // length of the playlist.
 
   toast.create({ description: 'Finding tracks and creating a playlist, it might take some time' });
-  const urls = await Promise.all(list.blocks.filter(b => b.type === 'mbrecording').map(b => b.data).map(resolveYt));
-  const ids = urls.filter(url => url != null).map(url => url.split('v=', 2)[1]);
+
+  const batchSize = 8;
+  const resolveInBatches = async (items: typeof list.blocks) => {
+    let results: (string | null)[] = [];
+    for (let i = 0; i < items.length; i += batchSize) {
+      const batch = items.slice(i, i + batchSize);
+      const batchResults = await Promise.all(batch.map(b => resolveYt(b.data).catch(() => null)));
+      results.push(...batchResults);
+    }
+    return results.filter(url => url !== null);
+  };
+
+  const urls = await resolveInBatches(list.blocks.filter(b => b.type === 'mbrecording'));
+  const ids = urls.map(url => url.split('v=', 2)[1]);
+
+  if (ids.length === 0) {
+    toast.create({ description: 'Error in finding tracks for the playlist, please retry', type: 'error' });
+    return;
+  }
 
   window.open(`https://www.youtube.com/watch_videos?video_ids=${ids.join(',')}`, '_blank');
 }
