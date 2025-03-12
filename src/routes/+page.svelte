@@ -19,7 +19,7 @@
   </div>
 
   <section class="max-w-4xl p-8 space-y-10">
-    <div class="p-4 grid grid-cols-1">
+    <div class="grid grid-cols-1">
       <div>
         <IconNotebook style="font-size: 3em;" class="dark:text-gray-300" />
         <h4 class="h4">More than Songs</h4>
@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="p-4 grid grid-cols-1">
+    <div class="grid grid-cols-1">
       <div>
         <IconNoUser style="font-size: 3em;" class="dark:text-gray-300" />
         <h4 class="h4">No Account needed</h4>
@@ -40,7 +40,7 @@
         </div>
       </div>
     </div>
-    <div class="p-4 grid grid-cols-1">
+    <div class="grid grid-cols-1">
       <div>
         <IconSpeaker style="font-size: 3em;" class="dark:text-gray-300" />
         <h4 class="h4">Play Anywhere</h4>
@@ -49,7 +49,7 @@
         </div>
       </div>
     </div>
-    <div class="p-4 grid grid-cols-1">
+    <div class="grid grid-cols-1">
       <div>
         <IconDB style="font-size: 3em;" class="dark:text-gray-300" />
         <h4 class="h4">High Quality Metadata</h4>
@@ -58,7 +58,7 @@
         </div>
       </div>
     </div>
-    <div class="p-4 grid grid-cols-1">
+    <div class="grid grid-cols-1">
       <div>
         <IconShare style="font-size: 3em;" class="dark:text-gray-300" />
         <h4 class="h4">Public Lists and Shares</h4>
