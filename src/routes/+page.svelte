@@ -1,105 +1,109 @@
-<script lang='ts'>
-  import { onMount } from 'svelte';
-  import { goto } from '$app/navigation';
-  import { createList, forgetList, recallLists, loadPublicLists } from '$lib/ops';
-  import IconPlusCircle from 'virtual:icons/la/plus-circle';
-  import IconGlobe from 'virtual:icons/la/globe';
-  import IconEye from 'virtual:icons/la/eye';
-  import IconPencil from 'virtual:icons/la/pencil-alt';
-  import { Tabs } from '@skeletonlabs/skeleton-svelte';
-  import ListCard from '$lib/components/ListCard.svelte';
-
-  let editableLists = $state([]);
-  let viewableLists = $state([]);
-  let publicLists = $state([]);
-
-  let listName = $state('');
-  let group = $state('mylists');
-
-  onMount(async () => {
-    editableLists = await recallLists(true);
-    viewableLists = await recallLists(false);
-    publicLists = await loadPublicLists();
-  });
+<script>
+  import IconUnlock from 'virtual:icons/solar/heart-unlock-bold-duotone';
+  import IconSafe from 'virtual:icons/solar/safe-square-bold-duotone';
+  import IconDB from 'virtual:icons/solar/database-bold-duotone';
+  import IconCode from 'virtual:icons/solar/sidebar-code-bold-duotone';
+  import IconNotebook from 'virtual:icons/solar/notebook-bookmark-bold-duotone';
+  import IconNoUser from 'virtual:icons/solar/user-minus-bold-duotone';
+  import IconSpeaker from 'virtual:icons/solar/speaker-minimalistic-bold-duotone';
+  import IconShare from 'virtual:icons/solar/share-circle-bold-duotone';
 </script>
 
-<svelte:head>
-  <title>mbzlists</title>
-</svelte:head>
+<div class="min-h-screen flex flex-col items-center justify-center text-gray-900">
+  <div class="p-8">
+    <p class="text-4xl font-bold text-gray-500 dark:text-gray-400">mbzlists</p>
+    <h2 class="h2">Music Curation<br> <i>by <b>Humans</b>, for <b>Humans</b></i></h2>
+    <p class="text-2xl mt-2 dark:text-gray-100">Share <i>stories</i> & <i>handpicked</i> songs, not an algorithm generated list</p>
+    <a href="/app" class="btn preset-filled-primary-500 mt-7 mr-2">Open App</a>
+    <button class="btn preset-outlined-surface-800-200 hover:preset-tonal mt-7 dark:text-gray-100 disabled">Why?</button>
+  </div>
 
-<Tabs bind:value={group}>
-  {#snippet list()}
-  <Tabs.Control value="mylists">
-    {#snippet lead()}<IconPencil />{/snippet}
-    My Lists
-  </Tabs.Control>
-  <Tabs.Control value="shared">
-    {#snippet lead()}<IconEye />{/snippet}
-    Shared with me
-  </Tabs.Control>
-  <Tabs.Control value="public">
-    {#snippet lead()}<IconGlobe />{/snippet}
-    Public Lists
-  </Tabs.Control>
-  {/snippet}
-
-  {#snippet content()}
-  <Tabs.Panel value="mylists">
-    <h3 class="mb-4 italic">
-      Total {editableLists.length} {editableLists.length == 1 ? 'playlist' : 'playlists'} remembered on this device. These are lists that you can edit.
-    </h3>
-
-    <div class="mb-5">
-      <div class="flex items-center ml-1">
-	<input type="search" class="w-full border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 input" bind:value={listName} placeholder="Enter new list name" />
-        <button onclick={async () => {
-          let list = await createList(listName, []);
-          goto(`/edit/${list.editId}`);
-          }} class="btn preset-filled-primary-500 ml-2">
-          Create <IconPlusCircle />
-        </button>
+  <section class="max-w-4xl p-8 space-y-10">
+    <div class="p-4 grid grid-cols-1">
+      <div>
+        <IconNotebook style="font-size: 3em;" class="dark:text-gray-300" />
+        <h4 class="h4">More than Songs</h4>
+        <div class="text-gray-600 dark:text-gray-200">
+          When we share songs with <i>heart</i> we share stories
+          too. <i>mbzlists</i> allows you to create your stories with annotated
+          playlists full of rich text and images.
+        </div>
       </div>
     </div>
-
-    <div class="space-y-2 col-span-full">
-      {#if editableLists.length > 0}
-        {#each editableLists as list}
-          <ListCard list={list} forgetCallback={async () => {
-            forgetList(list);
-            editableLists = await recallLists(true);
-            }} />
-        {/each}
-      {/if}
+    <div class="p-4 grid grid-cols-1">
+      <div>
+        <IconNoUser style="font-size: 3em;" class="dark:text-gray-300" />
+        <h4 class="h4">No Account needed</h4>
+        <div class="text-gray-600 dark:text-gray-200">
+          <i>mbzlists</i> works with shareable view and edit links and doesn't
+          need to know anything about you.
+        </div>
+      </div>
     </div>
-  </Tabs.Panel>
-  <Tabs.Panel value="shared">
-    <h3 class="mb-4 italic">
-      Total {viewableLists.length} view-only {viewableLists.length == 1 ? 'playlist' : 'playlists'} remembered on this device.
-    </h3>
-
-    <div class="space-y-2 col-span-full">
-      {#if viewableLists.length > 0}
-        {#each viewableLists as list}
-          <ListCard list={list} forgetCallback={async () => {
-            forgetList(list);
-            viewableLists = await recallLists(false);
-            }}/>
-        {/each}
-      {/if}
+    <div class="p-4 grid grid-cols-1">
+      <div>
+        <IconSpeaker style="font-size: 3em;" class="dark:text-gray-300" />
+        <h4 class="h4">Play Anywhere</h4>
+        <div class="text-gray-600 dark:text-gray-200">
+          Play songs on YouTube or Spotify (other services to be added). Or just download the XSPF playlist and use content resolvers to play on your player of choice.
+        </div>
+      </div>
     </div>
-  </Tabs.Panel>
-  <Tabs.Panel value="public">
-    <h3 class="mb-4 italic">
-      Total {publicLists.length} public {publicLists.length == 1 ? 'playlist' : 'playlists'} that people have made public on this server.
-    </h3>
-
-    <div class="space-y-2 col-span-full">
-      {#if publicLists.length > 0}
-        {#each publicLists as list}
-          <ListCard list={list} />
-        {/each}
-      {/if}
+    <div class="p-4 grid grid-cols-1">
+      <div>
+        <IconDB style="font-size: 3em;" class="dark:text-gray-300" />
+        <h4 class="h4">High Quality Metadata</h4>
+        <div class="text-gray-600 dark:text-gray-200">
+          We rely on the community-backed <a class="anchor" href="https://musicbrainz.org/" target="_blank">MusicBrainz</a> project which provides free and reliable source of metadata.
+        </div>
+      </div>
     </div>
-  </Tabs.Panel>
-  {/snippet}
-</Tabs>
+    <div class="p-4 grid grid-cols-1">
+      <div>
+        <IconShare style="font-size: 3em;" class="dark:text-gray-300" />
+        <h4 class="h4">Public Lists and Shares</h4>
+        <div class="text-gray-600 dark:text-gray-200">
+          Keep lists private, share with people you want to, or make them
+          public. The choice is yours.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-4xl p-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
+      <div class="p-4 shadow-lg rounded-lg">
+        <IconUnlock style="font-size: 2em;" class="dark:text-gray-300" />
+        <h5 class="h5">No Platform lock-ins</h5>
+        <div class="text-sm text-gray-600 dark:text-gray-200">
+          Take your data with globally identifiable MusicBrainz IDs and use them
+          anywhere.
+        </div>
+      </div>
+      <div class="p-4 shadow-lg rounded-lg">
+        <IconCode style="font-size: 2em;" class="dark:text-gray-300" />
+        <h5 class="h5">Self-hosted & FOSS</h5>
+        <div class="text-sm text-gray-600 dark:text-gray-200">
+          <i>mbzlists</i> is a Free and Open-Source Software that you can easily
+          self host if you want more control over your data.
+        </div>
+      </div>
+      <div class="p-4 shadow-lg rounded-lg disabled">
+        <IconSafe style="font-size: 2em;" class="dark:text-gray-300" />
+        <h5 class="h5">E2E encryption</h5>
+        <div class="text-sm text-gray-600 dark:text-gray-200">
+          [Coming Soon] All list data is by default end to end encrypted. Only
+          you know what's in your list.
+        </div>
+      </div>
+      <div class="p-4 shadow-lg rounded-lg">
+        <IconDB style="font-size: 2em;" class="dark:text-gray-300" />
+        <h5 class="h5">Data NOT for Sale</h5>
+        <div class="text-sm text-gray-600 dark:text-gray-200">
+          On <i>mbzlists.com</i>, only data from public playlists are accessible
+          widely, that too under a non-commercial license.
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

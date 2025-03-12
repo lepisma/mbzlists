@@ -10,7 +10,7 @@
 
 <header class="flex items-center justify-between p-6 rounded-t-lg">
   <h1 class="text-3xl font-bold text-gray-400">
-    <a href="/"><i>mbzlists</i></a>
+    <a href="/app" title="Go to App"><i>mbzlists</i></a>
   </h1>
   <nav class="flex justify-end p-4 space-x-5">
     <Modal
@@ -30,6 +30,9 @@
           <a href="https://musicbrainz.org/" class="anchor">MusicBrainz's</a>
           global IDs. Its goal is to allow high context music curation without
           locking you up in platform silos.
+        </p>
+        <p>
+          Go to <a href="/" class="anchor">the home page</a> to know more.
         </p>
       </article>
       {/snippet}
