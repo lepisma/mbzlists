@@ -38,19 +38,21 @@
           {#snippet trigger()}<IconDB class="mr-2" /> Data Policy{/snippet}
           {#snippet content()}
           <header class="flex justify-between">
-            <h4 class="h4">Data Policy</h4>
+            <h4 class="h4">Privacy & Data Policy</h4>
           </header>
           <article class="space-y-3">
             <p>
-              There are no personally identified information stored here. As you
-              create lists, your device <i>remembers</i> them by storing in its
-              local storage. If you change devices or don't remember edit or view
-              link of a list, you will loose them.
+              There are no personally identifiable information stored in
+              mbzlists other than what you store in the list itself. As you
+              create or view lists, your device <i>remembers</i> them by storing
+              their IDs in local storage. If you change devices or don't have
+              any other way of getting edit or view link of a list, you will
+              loose them.
             </p>
             <p>
               On mbzlists.com, public lists will be downloadable under a
-              non-commercial license. Your own private lists can be downloaded in
-              a dump. These export features are yet to be added.
+              non-commercial license. Your own private lists can be downloaded
+              in a dump. The export feature is yet to be added.
             </p>
             <p>
               You can self-host <i>mbzlists</i> to get even more control on your
