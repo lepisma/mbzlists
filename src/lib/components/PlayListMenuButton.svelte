@@ -5,12 +5,10 @@
   import IconCopy from 'virtual:icons/la/copy';
   import IconTrash from 'virtual:icons/la/trash';
   import { OutClick } from 'svelte-outclick';
-  import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
   import { createList, deleteList } from '$lib/ops';
 
   let { list, isEdit = false } = $props();
   let dropdownState: boolean = $state(false);
-  let toast: ToastContext = $state(getContext('toast'));
 
   async function cloneList() {
     let clonedList = await createList(`Copy of ${list.name}`, list.blocks);
@@ -34,7 +32,7 @@
             <a href="#" onclick={
                async () => {
                  await deleteList(list);
-                 goto('/');
+                 goto('/app');
               }} class="flex hover:bg-primary-100 dark:hover:bg-primary-700 items-center px-4 py-2 text-sm transition-colors duration-150" role="menuitem" tabindex="-1" id="menu-item-0"><IconTrash class="mr-2" />Delete List</a>
           {/if}
         </div>
