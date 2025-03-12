@@ -27,7 +27,7 @@
 <footer class="p-6 rounded-b-lg grid grid-cols-2">
   <div>
     <ul>
-      <li><a href="#" class="anchor flex items-center disabled"><IconDoc class="mr-2" /> Documentation</a></li>
+      <li><a href="https://docs.mbzlists.com/" class="anchor flex items-center"><IconDoc class="mr-2" /> Documentation</a></li>
       {#if showDataPolicySection}
         <Modal
           bind:open={dataModalState}
