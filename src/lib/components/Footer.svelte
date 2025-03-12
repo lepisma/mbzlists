@@ -35,7 +35,7 @@
           contentBase="card p-4 bg-surface-100 dark:bg-surface-900 space-y-4 shadow-xl max-w-screen-sm rounded-lg"
           backdropClasses="backdrop-blur-sm"
           >
-          {#snippet trigger()}<IconDB class="mr-2" /> Data Policy{/snippet}
+          {#snippet trigger()}<IconDB class="mr-2" /> Privacy & Data Policy{/snippet}
           {#snippet content()}
           <header class="flex justify-between">
             <h4 class="h4">Privacy & Data Policy</h4>
