@@ -40,7 +40,7 @@ export async function playListOnYt(list: List, toast: ToastContext) {
     return results.filter(url => url !== null);
   };
 
-  const urls = await resolveInBatches(list.blocks.filter(b => b.type === 'mbrecording'));
+  const urls = await resolveInBatches(list.blocks.filter(b => b.type === 'mbrecording' && b.data.title));
   const ids = urls.map(url => url.split('v=', 2)[1]);
 
   if (ids.length === 0) {

@@ -39,7 +39,7 @@
     <span title={list.lastModifiedOn}>modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
   </div>
 
-  <div class="mt-2 italic mb-4">Total {list.blocks.filter(b => b.type === 'mbrecording').length} songs, duration <PlayListDuration list={list} /></div>
+  <div class="mt-2 italic mb-4">Total {list.blocks.filter(b => b.type === 'mbrecording' && b.data.title).length} songs, duration <PlayListDuration list={list} /></div>
 
   <div class="flex space-x-2">
     <PlayListPlayButton list={list} />
