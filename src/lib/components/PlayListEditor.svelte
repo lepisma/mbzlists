@@ -125,19 +125,31 @@
 
   function renderSearch(searchCallback): HTMLDivElement {
     let container = document.createElement('div');
-    container.className = 'mt-4 relative';
+    container.className = 'mt-4 mb-4 relative';
+
+    let inputGroup = document.createElement('div');
+    inputGroup.className = 'input-group flex rounded-lg';
 
     let input = document.createElement('input');
-    input.className = 'w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-400 focus:border-transparent';
-    input.placeholder = 'Search and add songs using MusicBrainz Lucene syntax...';
+    input.className = 'ig-input w-full p-3 pl-5 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-400 focus:border-transparent';
+    input.placeholder = 'Search and add songs ...';
     input.oninput = (e) => handleInput(e, searchCallback);
+
+    let helpIcon = document.createElement('a');
+    helpIcon.className = 'ig-cell p-3 text-xl dark:text-gray-200';
+    helpIcon.innerHTML = '🛈';
+    helpIcon.style = 'text-decoration: none';
+    helpIcon.href = 'https://docs.mbzlists.com/essentials/search';
+    helpIcon.target = '_blank';
+
+    inputGroup.append(input, helpIcon);
 
     let dropdown = document.createElement('div');
     dropdown.className = 'absolute w-full bg-white dark:bg-gray-800 mt-1 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 max-h-60 overflow-y-auto z-10';
     dropdown.id = 'search-dropdown';
     dropdown.style.display = 'none';
 
-    container.append(input, dropdown);
+    container.append(inputGroup, dropdown);
 
     return container;
   }
