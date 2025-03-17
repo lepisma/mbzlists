@@ -103,7 +103,7 @@
   </Tabs.Panel>
   <Tabs.Panel value="public">
     <h3 class="mb-4 italic">
-      Total {publicLists.length} public {publicLists.length == 1 ? 'playlist' : 'playlists'} that people have made public on this server.
+      Total {publicLists.length} {publicLists.length == 1 ? 'playlist' : 'playlists'} that people have made public on this server.
     </h3>
 
     <div class="space-y-2 col-span-full">
