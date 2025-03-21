@@ -47,6 +47,7 @@
     <input
       type="text"
       class="text-4xl font-semibold mb-2 bg-transparent border-0 border-b-2 border-gray-400 focus:ring-0 focus:border-primary-500 transition-colors pl-0"
+      placeholder="Playlist Title"
       bind:value={list.name}
       oninput={handleNameEdits}
       />
