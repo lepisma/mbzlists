@@ -146,7 +146,7 @@
     inputGroup.append(input, helpIcon);
 
     let dropdown = document.createElement('ul');
-    dropdown.className = 'absolute w-full bg-white dark:bg-gray-800 mt-1 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 max-h-60 overflow-y-auto z-10';
+    dropdown.className = 'absolute w-full bg-white dark:bg-gray-800 mt-1 rounded-b-lg shadow-lg border border-gray-200 dark:border-gray-700 max-h-60 overflow-y-auto z-10';
     dropdown.id = 'search-dropdown';
     dropdown.style['display'] = 'none';
     dropdown.style['list-style-type'] = 'none';
