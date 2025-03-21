@@ -35,8 +35,9 @@
     dropdownEl.innerHTML = '';
     if (searchResults.length > 0) {
       for (let song of searchResults) {
-        let songContainer = document.createElement('div');
+        let songContainer = document.createElement('li');
         songContainer.className = 'p-3 hover:bg-primary-100 dark:hover:bg-primary-700 cursor-pointer transition-colors duration-150';
+        songContainer.style['padding-inline-start'] = '1em';
         songContainer.onclick = () => selectionCallback(song);
 
         let titleLine = document.createElement('div');
@@ -144,10 +145,13 @@
 
     inputGroup.append(input, helpIcon);
 
-    let dropdown = document.createElement('div');
+    let dropdown = document.createElement('ul');
     dropdown.className = 'absolute w-full bg-white dark:bg-gray-800 mt-1 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 max-h-60 overflow-y-auto z-10';
     dropdown.id = 'search-dropdown';
-    dropdown.style.display = 'none';
+    dropdown.style['display'] = 'none';
+    dropdown.style['list-style-type'] = 'none';
+    dropdown.style['padding-inline-start'] = '0';
+    dropdown.style['margin'] = '0';
 
     container.append(inputGroup, dropdown);
 
