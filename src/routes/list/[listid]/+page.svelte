@@ -21,6 +21,8 @@
     description: '',
   });
 
+  let songsBlocks = $derived(list.blocks.filter(b => b.type === 'mbrecording' && b.data.title));
+
   onMount(async () => {
     list = await loadList(list.viewId);
     // Every list that we view is remembered
@@ -39,7 +41,7 @@
     <span title={list.lastModifiedOn}>modified: {formatDistanceToNow(list.lastModifiedOn, { addSuffix: true })}</span>
   </div>
 
-  <div class="mt-2 italic mb-4">Total {list.blocks.filter(b => b.type === 'mbrecording' && b.data.title).length} songs, duration <PlayListDuration list={list} /></div>
+  <div class="mt-2 italic mb-4">Total {songsBlocks.length} {songsBlocks.length === 1 ? 'song' : 'songs'}, duration <PlayListDuration list={list} /></div>
 
   <div class="flex space-x-2">
     <PlayListPlayButton list={list} />
