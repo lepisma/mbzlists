@@ -79,8 +79,7 @@
   .ce-popover-item,
   .ce-popover-item-html,
   .ce-popover-item__icon,
-  .ce-popover-items,
-  .ce-popover-item:hover {
+  .ce-popover-items {
     @apply bg-gray-800 text-gray-100 border-none;
   }
 
@@ -89,8 +88,10 @@
   }
 
   .ce-inline-tool:hover,
-  .ce-popover-item:hover {
-    @apply bg-gray-600;
+  .ce-popover-item:hover,
+  .ce-popover-item--focused,
+  .ce-popover-item--focused:not(.ce-popover-item--no-focus) {
+    @apply bg-gray-600 text-gray-100 border-none !important;
   }
 
   .cdx-search-field__input {
