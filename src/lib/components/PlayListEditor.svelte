@@ -12,6 +12,7 @@
 
   let searchQuery = $state('');
   let searchResults = $state([]);
+  let selectedIndex = $state(-1);
 
   function showDropdown() {
     let dropdownEl = document.getElementById('search-dropdown');
@@ -36,9 +37,11 @@
     if (searchResults.length > 0) {
       for (let song of searchResults) {
         let songContainer = document.createElement('li');
-        songContainer.className = 'p-3 hover:bg-primary-100 dark:hover:bg-primary-700 cursor-pointer transition-colors duration-150';
+        songContainer.className = 'p-3 focus:bg-primary-100 dark:focus:bg-primary-700 hover:bg-primary-100 dark:hover:bg-primary-700 cursor-pointer transition-colors duration-150';
         songContainer.style['padding-inline-start'] = '1em';
+        songContainer.tabIndex = 0;
         songContainer.onclick = () => selectionCallback(song);
+        songContainer.onkeydown = handleKeyDownDropdownItem;
 
         let titleLine = document.createElement('div');
         let artistLine = document.createElement('div');
@@ -51,6 +54,7 @@
         songContainer.append(titleLine, artistLine, releaseLine);
         dropdownEl.append(songContainer);
         showDropdown();
+        dropdownEl.scrollTop = 0;
       }
     } else {
       hideDropdown();
@@ -65,6 +69,65 @@
       hideDropdown();
     }
   }, 300);
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'ArrowDown') {
+      let dropdownEl = document.getElementById('search-dropdown');
+      let items = dropdownEl.querySelectorAll('li');
+
+      if (!dropdownEl.style.display) {
+        // The dropdown is visible so we should go ahead with arrow movements
+        // This also means that there is at least one item to show
+        e.stopPropagation();
+        // Move focus to the ul and select the first item (moving selection there)
+        selectedIndex = 0;
+        items[selectedIndex]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        items[selectedIndex]?.focus();
+      }
+    }
+  };
+
+  const handleKeyDownDropdownItem = (e) => {
+    if (e.key === 'ArrowDown') {
+      // Move down the <li>s till you reach the end and stop there
+      e.preventDefault();
+      e.stopPropagation();
+      let dropdownEl = document.getElementById('search-dropdown');
+      let items = dropdownEl.querySelectorAll('li');
+
+      if (selectedIndex < items.length - 1) {
+        selectedIndex += 1;
+        items[selectedIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        items[selectedIndex].focus();
+      }
+    } else if (e.key === 'ArrowUp') {
+      // Move up till the first <li>, then further move focus to the input
+      e.preventDefault();
+      e.stopPropagation();
+
+      let dropdownEl = document.getElementById('search-dropdown');
+      let items = dropdownEl.querySelectorAll('li');
+
+      if (selectedIndex === 0) {
+        selectedIndex -= 1;
+        document.getElementById('search-input').focus();
+      } else {
+        selectedIndex -= 1;
+        items[selectedIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        items[selectedIndex].focus();
+      }
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      e.stopPropagation();
+      e.target.click();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
+      selectedIndex = 0;
+      document.getElementById('search-input').focus();
+      hideDropdown();
+    }
+  }
 
   function renderCoverArt(releaseId: string): HTMLDivElement {
     const coverArt = document.createElement('div');
@@ -135,6 +198,8 @@
     input.className = 'ig-input w-full p-3 pl-5 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-400 focus:border-transparent';
     input.placeholder = 'Search and add songs ...';
     input.oninput = (e) => handleInput(e, searchCallback);
+    input.onkeydown = handleKeyDown;
+    input.id = 'search-input';
 
     let helpIcon = document.createElement('a');
     helpIcon.className = 'ig-cell p-3 text-xl dark:text-gray-200';
@@ -152,6 +217,7 @@
     dropdown.style['list-style-type'] = 'none';
     dropdown.style['padding-inline-start'] = '0';
     dropdown.style['margin'] = '0';
+    dropdown.role = 'listbox';
 
     container.append(inputGroup, dropdown);
 
