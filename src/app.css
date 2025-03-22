@@ -60,7 +60,9 @@
   .ce-toolbar__plus::selection,
   .ce-toolbar__settings-btn::selection,
   .ce-popover__search::selection,
-  .codex-editor ::selection {
+  .codex-editor ::selection,
+  .ce-block--selected,
+  .ce-block--selected .cdx-list {
     @apply bg-primary-700 text-gray-100;
   }
 
@@ -87,6 +89,10 @@
     @apply bg-gray-800 text-gray-100 border-none;
   }
 
+  .cdx-list-start-with-field {
+    @apply bg-gray-800 text-gray-100 !important;
+  }
+
   .ce-inline-tool {
     @apply text-gray-100;
   }
@@ -99,7 +105,8 @@
   }
 
   .cdx-search-field__input,
-  .ce-inline-tool-input {
+  .ce-inline-tool-input,
+  .cdx-list-start-with-field__input {
     @apply input rounded-none pl-2;
   }
 }
