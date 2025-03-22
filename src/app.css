@@ -36,6 +36,10 @@
     @apply text-gray-100 border-gray-700 bg-gray-900 !important;
   }
 
+  li {
+    @apply text-gray-100;
+  }
+
   .ce-block__content a.anchor,
   .ce-block__content a {
     @apply text-white;
@@ -94,7 +98,8 @@
     @apply bg-gray-600 text-gray-100 border-none !important;
   }
 
-  .cdx-search-field__input {
+  .cdx-search-field__input,
+  .ce-inline-tool-input {
     @apply input rounded-none pl-2;
   }
 }
