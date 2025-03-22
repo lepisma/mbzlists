@@ -202,11 +202,12 @@
     input.id = 'search-input';
 
     let helpIcon = document.createElement('a');
-    helpIcon.className = 'ig-cell p-3 text-xl dark:text-gray-200';
+    helpIcon.className = 'ig-cell p-3 text-xl dark:text-gray-200 dark:bg-gray-900';
     helpIcon.innerHTML = '🛈';
     helpIcon.style = 'text-decoration: none';
     helpIcon.href = 'https://docs.mbzlists.com/essentials/search';
     helpIcon.target = '_blank';
+    helpIcon.title = 'How to Search?';
 
     inputGroup.append(input, helpIcon);
 

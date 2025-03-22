@@ -32,6 +32,10 @@
 }
 
 @media (prefers-color-scheme: dark) {
+  .ig-input {
+    @apply text-gray-100 border-gray-700 bg-gray-900 !important;
+  }
+
   .ce-block__content a.anchor {
     @apply text-white;
   }
