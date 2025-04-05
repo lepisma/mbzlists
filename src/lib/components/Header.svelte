@@ -32,7 +32,7 @@
           locking you up in platform silos.
         </p>
         <p>
-          Go to <a href="/" class="anchor">the home page</a> to know more.
+          Go to <a href="/" class="anchor" onclick={modalClose}>the home page</a> to know more.
         </p>
       </article>
       {/snippet}
