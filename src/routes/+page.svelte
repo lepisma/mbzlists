@@ -45,7 +45,7 @@
         <IconSpeaker style="font-size: 3em;" class="dark:text-gray-300" />
         <h4 class="h4">Play Anywhere</h4>
         <div class="text-gray-600 dark:text-gray-200">
-          Play songs on YouTube or Spotify (other services to be added). Or just download the XSPF playlist and use content resolvers to play on your player of choice.
+          Play songs on YouTube or Spotify (other services to be added). Or just download the XSPF playlist and use <a class="anchor" href="https://github.com/lepisma/mbzlists-resolvers" target="_blank">content resolvers</a> to play on your player of choice.
         </div>
       </div>
     </div>
