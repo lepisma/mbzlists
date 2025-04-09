@@ -4,6 +4,7 @@
   import debounce from 'lodash/debounce';
   import PlayListDuration from '$lib/components/PlayListDuration.svelte';
   import PlayListPlayButton from '$lib/components/PlayListPlayButton.svelte';
+  import ExportButton from '$lib/components/ExportButton.svelte';
   import PlayListMenuButton from '$lib/components/PlayListMenuButton.svelte';
   import PlayListEditor from '$lib/components/PlayListEditor.svelte';
   import ShareButton from '$lib/components/ShareButton.svelte';
@@ -61,6 +62,7 @@
 
   <div class="flex space-x-2">
     <PlayListPlayButton list={list} />
+    <ExportButton list={list} />
     <ShareButton list={list} isEdit={true} />
     <PlayListMenuButton list={list} isEdit={true} />
   </div>

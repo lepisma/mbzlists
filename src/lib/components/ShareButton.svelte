@@ -1,6 +1,5 @@
 <script lang='ts'>
   import { getContext } from 'svelte';
-  import IconDownload from 'virtual:icons/la/download';
   import IconCopy from 'virtual:icons/la/copy';
   import IconShare from 'virtual:icons/la/share';
   import IconLock from 'virtual:icons/la/lock';
@@ -86,9 +85,6 @@
     </article>
 
     <footer class="flex justify-end gap-4 pt-2">
-      <a href={`/api/list/${list.viewId}?type=xspf`} class="btn preset-tonal">
-        <IconDownload class="mr-2" /> Download list as XSPF
-      </a>
       <button type="button" class="btn preset-tonal" onclick={() => openState = false}>Done</button>
     </footer>
   {/snippet}
