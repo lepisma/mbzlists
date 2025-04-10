@@ -2,6 +2,7 @@
   import { getContext } from 'svelte';
   import IconExport from 'virtual:icons/solar/export-linear';
   import IconSpotifyIcon from 'virtual:icons/hugeicons/spotify';
+  import IconYouTubeIcon from 'virtual:icons/si/youtube-line';
   import IconMedia from 'virtual:icons/fluent-mdl2/media';
   import IconXML from 'virtual:icons/tabler/file-type-xml';
   import { OutClick } from 'svelte-outclick';
@@ -11,8 +12,8 @@
   let dropdownState: boolean = $state(false);
   let toast: ToastContext = $state(getContext('toast'));
 
-  function spotifyExportUrl () {
-    let root = 'https://resolvers.mbzlists.com/spotify/create';
+  function resolverExportUrl (app: string) {
+    let root = `https://resolvers.mbzlists.com/${app}/create`;
     let current_url = new URL(document.URL);
     let mbzlists_url =`${current_url.origin}/list/${list.viewId}`;
     return root + '?mbzlists_url=' + encodeURI(mbzlists_url);
@@ -34,7 +35,8 @@
     <OutClick onOutClick={() => dropdownState = false}>
       <div class="absolute z-10 mt-2 w-40 origin-top-right divide-y divide-gray-100 dark:divide-gray-600 rounded-lg bg-white dark:bg-gray-800 dark:text-white ring-1 shadow-lg ring-black/5 dark:ring-white/10 focus:outline-hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
         <div class="py-1" role="none">
-          <a href={spotifyExportUrl()} target="_blank" class="flex hover:bg-primary-100 dark:hover:bg-primary-700 items-center px-4 py-2 text-sm transition-colors duration-150" role="menuitem" tabindex="-1" id="menu-item-0"><IconSpotifyIcon class="mr-2" /> Export to Spotify</a>
+          <a href={resolverExportUrl('spotify')} target="_blank" class="flex hover:bg-primary-100 dark:hover:bg-primary-700 items-center px-4 py-2 text-sm transition-colors duration-150" role="menuitem" tabindex="-1" id="menu-item-0"><IconSpotifyIcon class="mr-2" /> Export to Spotify</a>
+          <a href={resolverExportUrl('youtube')} target="_blank" class="flex hover:bg-primary-100 dark:hover:bg-primary-700 items-center px-4 py-2 text-sm transition-colors duration-150" role="menuitem" tabindex="-1" id="menu-item-0"><IconYouTubeIcon class="mr-2" /> Export to YouTube</a>
           <a href="https://resolvers.mbzlists.com" target="_blank" class="flex hover:bg-primary-100 dark:hover:bg-primary-700 items-center px-4 py-2 text-sm transition-colors duration-150" role="menuitem" tabindex="-1" id="menu-item-0"><IconMedia class="mr-2" /> Export to Subsonic</a>
           <a href={`/api/list/${list.viewId}?type=xspf`} class="flex hover:bg-primary-100 dark:hover:bg-primary-700 items-center px-4 py-2 text-sm transition-colors duration-150" role="menuitem" tabindex="-1" id="menu-item-0"><IconXML class="mr-2" /> Download as XSPF</a>
         </div>
