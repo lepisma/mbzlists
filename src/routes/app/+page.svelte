@@ -55,23 +55,18 @@
     </h3>
 
     <div class="mb-5">
-      <div class="flex items-center ml-1">
+      <form class="flex items-center ml-1" onsubmit={createListAndOpen}>
 	<input
           type="search"
           class="w-full border-gray-300 focus:border-primary-300 focus:ring focus:ring-primary-200 input"
           bind:value={listName}
+          required
           placeholder="Enter new list name"
-          onkeydown={async (e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              await createListAndOpen();
-            }
-          }}
-        />
-        <button onclick={createListAndOpen} class="btn preset-filled-primary-500 ml-2">
+          />
+        <button type="submit" class="btn preset-filled-primary-500 ml-2">
           Create <IconPlusCircle />
         </button>
-      </div>
+      </form>
     </div>
 
     <div class="space-y-2 col-span-full">
