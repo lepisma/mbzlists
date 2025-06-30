@@ -50,13 +50,16 @@
               loose them.
             </p>
             <p>
-              On mbzlists.com, public lists will be downloadable under a
-              non-commercial license. Your own private lists can be downloaded
-              in a dump. The export feature is yet to be added.
+              Public lists are downloadable under the Creative Commons
+              Attribution-NonCommercial 4.0 International License (CC BY-NC
+              4.0). For more information, please visit
+              <a href="https://creativecommons.org/licenses/by-nc/4.0/">https://creativecommons.org/licenses/by-nc/4.0/</a>.
             </p>
             <p>
               You can self-host <i>mbzlists</i> to get even more control on your
-              data. Check out <a class="anchor" href="https://github.com/lepisma/mbzlists">the source</a> for that.
+              data. Check out <a class="anchor"
+              href="https://github.com/lepisma/mbzlists">the source</a> for
+              that.
             </p>
           </article>
           {/snippet}
