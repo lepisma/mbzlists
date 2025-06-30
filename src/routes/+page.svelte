@@ -52,9 +52,9 @@
     <div class="grid grid-cols-1">
       <div>
         <IconDB style="font-size: 3em;" class="dark:text-gray-300" />
-        <h4 class="h4">High Quality Metadata</h4>
+        <h4 class="h4">Community Curated Metadata</h4>
         <div class="text-gray-600 dark:text-gray-200">
-          We rely on the community-backed <a class="anchor" href="https://musicbrainz.org/" target="_blank">MusicBrainz</a> project which provides free and reliable source of metadata.
+          We rely on <a class="anchor" href="https://musicbrainz.org/" target="_blank">MusicBrainz</a> project for free and reliable source of metadata.
         </div>
       </div>
     </div>
