@@ -1,5 +1,9 @@
 #+title: mbzlists
 
+#+begin_quote
+Development for this project has moved to sourcehut [[https://sr.ht/~lepisma/mbzlists/][here]]. This repository is now in a read-only state.
+#+end_quote
+
 [[https://img.shields.io/github/v/tag/lepisma/mbzlists.svg]] [[https://img.shields.io/docker/v/lepisma/mbzlists.svg]]
 
 Self hosted, login-free, /annotated playlist manager/ based on Musicbrainz IDs. It
